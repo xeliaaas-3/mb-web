@@ -1,36 +1,30 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Maria Bonita Boutique — tienda web
 
-## Getting Started
-
-First, run the development server:
+Next.js 16 (App Router) + Tailwind CSS 4. Basada en el diseño de Google Stitch "Haute Editorial Boutique".
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+npm install
+npm run dev      # http://localhost:3000
+npm run build
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Cómo está armado
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+| Ruta | Archivo |
+| --- | --- |
+| `/` inicio | `src/app/page.tsx` |
+| `/catalogo` (filtros en la URL: `categoria`, `coleccion`, `talle`, `color`, `max`, `orden`, `buscar`) | `src/app/catalogo/CatalogView.tsx` |
+| `/prenda/[slug]` (generada estática por prenda) | `src/app/prenda/[slug]/` |
+| `/bolsa` bolsa + checkout por WhatsApp | `src/app/bolsa/BagView.tsx` |
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+- **Tokens de diseño**: `src/app/globals.css` (`@theme`). Paleta, tipografías, radio 0 y utilidades `label-caps`, `page-x`, `link-editorial`.
+- **Prendas, talles, stock y precios**: `src/lib/products.ts`.
+- **Datos del negocio** (WhatsApp, dirección, horarios, envíos, medios de pago, meta de envío gratis): `src/lib/site.ts`.
+- **Bolsa**: `src/lib/cart.ts`, guardada en `localStorage` del navegador.
+- **Mensaje de WhatsApp**: `src/lib/order.ts` (`buildOrderMessage`). El checkout valida datos, arma el pedido en texto y abre `wa.me/<número>?text=…`.
 
-## Learn More
+## Pendiente antes de publicar
 
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- Reemplazar las imágenes de `src/lib/images.ts` (generadas por IA en Stitch, alojadas en Google) por fotos reales en `public/` y quitar `images.remotePatterns` de `next.config.ts`.
+- Revisar precios, stock, textos de prendas, reseñas, cuenta de Instagram y dirección.
+- El stock está en el código: no se descuenta solo. Las asesoras confirman disponibilidad por WhatsApp.
