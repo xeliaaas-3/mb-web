@@ -35,7 +35,11 @@ const trust = [
     body: "Asesoramiento directo en styling y talles reales por WhatsApp.",
   },
   { Icon: RefreshCw, title: `Cambios hasta ${site.exchangeDays} días`, body: "En prendas sin uso y con etiqueta." },
-  { Icon: Store, title: "Boutique oficial en Fernando de la Mora", body: `${site.address.street} · ${site.hours}.` },
+  {
+    Icon: Store,
+    title: `Boutique en ${site.address.detail}, ${site.address.city}`,
+    body: `${site.address.street} · ${site.hours}.`,
+  },
 ];
 
 const useMounted = () =>
@@ -55,7 +59,7 @@ export function BagView() {
   const totals = orderTotals(subtotal, form.shipping);
   const option = shippingOptions.find((o) => o.id === form.shipping)!;
   const missingForFree = Math.max(0, freeDeliveryThreshold - subtotal);
-  const previewId = sentOrder ?? "MB-XXXXX";
+  const previewId = sentOrder ?? "AB-XXXXX";
 
   const set = <K extends keyof CheckoutForm>(key: K, value: CheckoutForm[K]) => {
     setForm((f) => ({ ...f, [key]: value }));
@@ -136,7 +140,7 @@ export function BagView() {
     <form noValidate onSubmit={submit} className="page-width page-x pt-6 pb-section md:pt-10">
       <div className="flex items-end justify-between gap-4">
         <div>
-          <p className={eyebrow}>Maria Bonita Boutique · PY</p>
+          <p className={eyebrow}>{site.name} · PY</p>
           <h1 className="mt-2 font-serif text-headline-lg-mobile lowercase italic md:text-headline-lg">
             tu bolsa de compras
           </h1>

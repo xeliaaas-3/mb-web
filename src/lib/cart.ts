@@ -6,7 +6,7 @@ import { getProduct, type Product } from "./products";
 export type CartLine = { slug: string; size: string; color: string; qty: number };
 export type ResolvedLine = CartLine & { key: string; product: Product; lineTotal: number; maxQty: number };
 
-const STORAGE_KEY = "mb-bolsa-v1";
+const STORAGE_KEY = "alba-bolsa-v1";
 const EMPTY: CartLine[] = [];
 
 let lines: CartLine[] = EMPTY;

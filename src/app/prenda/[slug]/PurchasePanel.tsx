@@ -45,7 +45,7 @@ export function PurchasePanel({ product }: { product: Product }) {
   return (
     <div>
       <div className="flex items-center justify-between gap-4">
-        <p className="label-caps-sm">Maria Bonita Atelier</p>
+        <p className="label-caps-sm">Alba Atelier</p>
         {stock > 0 ? (
           <p className="flex shrink-0 items-center gap-1.5 label-caps-sm whitespace-nowrap text-success">
             <span className="size-1.5 rounded-full bg-success" /> Stock Asunción

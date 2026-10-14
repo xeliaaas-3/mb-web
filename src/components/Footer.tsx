@@ -7,9 +7,9 @@ export function Footer() {
     <footer className="border-t border-hairline bg-sand pb-28 lg:pb-0">
       <div className="page-width grid gap-10 page-x py-section md:grid-cols-4">
         <div className="md:col-span-2">
-          <p className="font-serif text-headline-sm lowercase">maria bonita boutique</p>
+          <p className="font-serif text-headline-sm lowercase">{site.name.toLowerCase()}</p>
           <p className="mt-3 max-w-sm text-body-md text-stone-text">
-            Moda femenina de autor en lino, seda y algodón. Curada en Fernando de la Mora, enviada a todo Paraguay.
+            Moda femenina de autor en lino, seda y algodón. Curada en Asunción, enviada a todo Paraguay.
           </p>
         </div>
         <div>
@@ -50,7 +50,7 @@ export function Footer() {
         </div>
       </div>
       <p className="border-t border-hairline page-x py-6 text-center text-body-sm text-stone-text">
-        © {new Date().getFullYear()} Maria Bonita Boutique · Paraguay
+        © {new Date().getFullYear()} {site.name} · Paraguay
       </p>
     </footer>
   );

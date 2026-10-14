@@ -1,6 +1,6 @@
 import type { ResolvedLine } from "./cart";
 import { formatGs } from "./format";
-import { shippingCost, shippingOptions, type ShippingId } from "./site";
+import { shippingCost, shippingOptions, site, type ShippingId } from "./site";
 
 export type CheckoutForm = {
   name: string;
@@ -41,7 +41,7 @@ export function orderTotals(subtotal: number, shipping: ShippingId) {
 
 export function newOrderId() {
   const n = Math.floor(Date.now() / 1000) % 100000;
-  return `MB-${String(n).padStart(5, "0")}`;
+  return `AB-${String(n).padStart(5, "0")}`;
 }
 
 /** Texto plano del pedido. Se codifica una sola vez al armar el link de WhatsApp. */
@@ -52,7 +52,7 @@ export function buildOrderMessage(orderId: string, form: CheckoutForm, items: Re
   const rule = "──────────────";
 
   const lines = [
-    "¡Hola! Quiero confirmar este pedido hecho desde la web de Maria Bonita Boutique.",
+    `¡Hola! Quiero confirmar este pedido hecho desde la web de ${site.name}.`,
     "",
     `*Pedido ${orderId}*`,
     rule,

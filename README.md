@@ -1,4 +1,4 @@
-# Maria Bonita Boutique — tienda web
+# Alba Boutique — tienda web de ejemplo
 
 Next.js 16 (App Router) + Tailwind CSS 4. Basada en el diseño de Google Stitch "Haute Editorial Boutique".
 

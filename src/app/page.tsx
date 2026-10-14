@@ -33,7 +33,7 @@ const reviews = [
   {
     text: "Fui a retirar al atelier y la atención fue hermosa. Ya es mi lugar para encontrar prendas que nadie más tiene.",
     name: "Camila Benítez",
-    place: "Fernando de la Mora",
+    place: "Lambaré",
   },
 ];
 
@@ -151,7 +151,7 @@ export default function Home() {
         <blockquote className="mx-auto max-w-3xl font-serif text-headline-md italic md:text-headline-lg">
           “La verdadera distinción no reside en llamar la atención, sino en permanecer en la memoria.”
         </blockquote>
-        <p className="mt-6 label-caps-sm text-stone-text">Maria Bonita Atelier · Asunción</p>
+        <p className="mt-6 label-caps-sm text-stone-text">Alba Atelier · Asunción</p>
       </section>
 
       {/* Cómo funciona */}
@@ -292,7 +292,7 @@ export default function Home() {
           <div className="lg:col-span-5">
             <p className={eyebrow}>Visitanos en persona</p>
             <h2 id="atelier" className={`${sectionTitle} mt-2`}>
-              atelier fernando de la mora
+              atelier villa morra
             </h2>
             <p className="mt-4 text-body-lg text-stone-text">
               Un espacio íntimo y acogedor, creado para probarte tus prendas preferidas con asesoramiento exclusivo.
@@ -322,7 +322,7 @@ export default function Home() {
           </div>
           <div className="relative min-h-80 border border-hairline lg:col-span-7">
             <iframe
-              title="Mapa del atelier Maria Bonita en Fernando de la Mora"
+              title="Mapa del atelier en Villa Morra, Asunción"
               src={`https://www.google.com/maps?q=${encodeURIComponent(site.address.mapsQuery)}&output=embed`}
               className="absolute inset-0 h-full w-full grayscale-[60%]"
               loading="lazy"

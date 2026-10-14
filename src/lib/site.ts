@@ -1,18 +1,18 @@
 export const site = {
-  name: "Maria Bonita Boutique",
-  shortName: "Maria Bonita",
+  name: "Alba Boutique",
+  shortName: "Alba",
   tagline: "Boutique | PY",
   description:
     "Moda femenina de autor en lino, seda y algodón. Comprá online y coordiná tu pedido por WhatsApp. Envíos a todo Paraguay.",
   /** Número de WhatsApp en formato internacional, solo dígitos. */
-  whatsapp: "595985200792",
-  whatsappDisplay: "+595 985 200 792",
-  instagram: "mabonitaaa",
+  whatsapp: "595971444874",
+  whatsappDisplay: "+595 971 444 874",
+  instagram: "albaboutique.py",
   address: {
-    street: "Las Residentas 1402",
-    detail: "c/ Juan Leopardi",
-    city: "Fernando de la Mora",
-    mapsQuery: "Las Residentas 1402, Fernando de la Mora, Paraguay",
+    street: "Av. España 1234",
+    detail: "Villa Morra",
+    city: "Asunción",
+    mapsQuery: "Villa Morra, Asunción, Paraguay",
   },
   hours: "Lunes a sábado, 09:00 a 19:00 hs",
   parking: "Privado y gratuito",
@@ -33,7 +33,7 @@ export const shippingOptions: {
   {
     id: "delivery",
     label: "Delivery a domicilio",
-    detail: "Asunción, Fernando de la Mora y Gran Asunción (12 a 24 hs)",
+    detail: "Asunción y Gran Asunción (12 a 24 hs)",
     cost: 25000,
     needsAddress: true,
   },
