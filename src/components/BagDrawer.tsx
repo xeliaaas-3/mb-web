@@ -1,6 +1,7 @@
 "use client";
 
 import Image from "next/image";
+import { isOptimizable } from "@/lib/images";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useRef } from "react";
@@ -73,7 +74,14 @@ export function BagDrawer() {
                 return (
                   <li key={item.key} className="flex gap-4 rounded-2xl border border-hairline bg-card p-3 shadow-soft">
                     <div className="relative aspect-[3/4] w-16 shrink-0 overflow-hidden rounded-lg bg-sand">
-                      <Image src={image.src} alt={image.alt} fill sizes="64px" className="object-cover" />
+                      <Image
+                        src={image.src}
+                        unoptimized={!isOptimizable(image.src)}
+                        alt={image.alt}
+                        fill
+                        sizes="64px"
+                        className="object-cover"
+                      />
                     </div>
                     <div className="flex min-w-0 flex-1 flex-col">
                       <div className="flex items-start justify-between gap-2">
@@ -95,7 +103,7 @@ export function BagDrawer() {
                             type="button"
                             aria-label="Restar una unidad"
                             disabled={item.qty <= 1}
-                            onClick={() => cart.setQty(item.key, item.qty - 1)}
+                            onClick={() => cart.setQty(item.key, item.qty - 1, item.maxQty)}
                             className="flex size-7 items-center justify-center disabled:text-stone"
                           >
                             <Minus size={12} strokeWidth={1.5} />
@@ -105,7 +113,7 @@ export function BagDrawer() {
                             type="button"
                             aria-label="Sumar una unidad"
                             disabled={item.qty >= item.maxQty}
-                            onClick={() => cart.setQty(item.key, item.qty + 1)}
+                            onClick={() => cart.setQty(item.key, item.qty + 1, item.maxQty)}
                             className="flex size-7 items-center justify-center disabled:text-stone"
                           >
                             <Plus size={12} strokeWidth={1.5} />

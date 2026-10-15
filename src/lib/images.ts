@@ -77,3 +77,21 @@ export const photo = {
   braidedBelt: unsplash("1711443982852-b3df5c563448"),
   catEyeSunglasses: unsplash("1611824204322-24963b44d68b"),
 } as const;
+
+/** Hosts que Next puede optimizar (deben coincidir con images.remotePatterns de next.config.ts). */
+export const optimizedImageHosts = [
+  "images.unsplash.com",
+  "lh3.googleusercontent.com",
+  "res.cloudinary.com",
+  "i.ibb.co",
+];
+
+/** Fotos de otros sitios (links pegados en la planilla) se muestran sin optimizar en vez de romper la página. */
+export function isOptimizable(src: string) {
+  try {
+    const url = new URL(src, "https://local");
+    return url.hostname === "local" || optimizedImageHosts.includes(url.hostname);
+  } catch {
+    return false;
+  }
+}

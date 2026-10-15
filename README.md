@@ -21,7 +21,7 @@ npm run build
 
 - **Tokens de diseño**: `src/app/globals.css` (`@theme`). Fondo crema, tarjetas blancas redondeadas, Playfair Display + Geist y utilidades `label-caps`, `page-x`, `link-editorial`.
 - **Bolsa lateral** (`src/components/BagDrawer.tsx`) y **asistente de talles** (`src/components/SizeAssistant.tsx`, medidas en `src/lib/sizes.ts`).
-- **Prendas, categorías, colecciones, talles, stock y precios**: `src/lib/products.ts` (47 productos de ejemplo).
+- **Catálogo editable desde Google Sheets** (`src/lib/catalog.ts`): ver [docs/catalogo.md](docs/catalogo.md). Sin planilla configurada se usa el catálogo de ejemplo de `src/lib/products.ts` (47 productos), donde también están categorías y colecciones.
 - **Textos** (beneficios, looks, reseñas, preguntas frecuentes, políticas, montos de gift card): `src/lib/content.ts`.
 - **Datos del negocio** (WhatsApp, dirección, horarios, envíos, medios de pago, meta de envío gratis): `src/lib/site.ts`.
 - **Bolsa**: `src/lib/cart.ts`, guardada en `localStorage` del navegador.
@@ -31,7 +31,7 @@ npm run build
 
 - Reemplazar las fotos de ejemplo de `src/lib/images.ts` (Unsplash, licencia libre) por fotos reales de las prendas en `public/` y ajustar `images.remotePatterns` de `next.config.ts`.
 - Revisar precios, stock, textos de prendas, reseñas, looks, preguntas frecuentes y políticas (`src/lib/products.ts` y `src/lib/content.ts`), cuenta de Instagram y dirección.
-- El stock está en el código: no se descuenta solo. Las asesoras confirman disponibilidad por WhatsApp.
+- El stock se carga en la planilla y no se descuenta solo con cada pedido. Las asesoras confirman disponibilidad por WhatsApp.
 
 ## Compartir, Google y analítica
 

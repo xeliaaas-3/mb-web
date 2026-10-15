@@ -6,7 +6,7 @@ import { RefreshCw, Ruler, ShoppingBag, Store, Truck } from "lucide-react";
 import { SizeAssistant } from "@/components/SizeAssistant";
 import { button } from "@/components/ui";
 import { WhatsAppIcon } from "@/components/WhatsAppIcon";
-import { cart } from "@/lib/cart";
+import { cart, stockOf } from "@/lib/cart";
 import { formatGs } from "@/lib/format";
 import { capitalize } from "@/lib/order";
 import { categoryOf, totalStock, type Product } from "@/lib/products";
@@ -30,7 +30,7 @@ export function PurchasePanel({ product }: { product: Product }) {
 
   function addToBag() {
     if (!requireSize()) return;
-    cart.add({ slug: product.slug, size: size!, color });
+    cart.add({ slug: product.slug, size: size!, color }, stockOf(product, size!));
     trackEvent("add_to_cart", { product: product.slug, size: size!, value: product.price });
     bagDrawer.open();
   }

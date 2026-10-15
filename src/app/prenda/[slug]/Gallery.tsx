@@ -1,6 +1,7 @@
 "use client";
 
 import Image from "next/image";
+import { isOptimizable } from "@/lib/images";
 import { useRef, useState } from "react";
 import { FavoriteButton } from "@/components/FavoriteButton";
 import { badgeLabel, type Product } from "@/lib/products";
@@ -35,6 +36,7 @@ export function Gallery({ product }: { product: Product }) {
           >
             <Image
               src={image.src}
+              unoptimized={!isOptimizable(image.src)}
               alt={image.alt}
               fill
               priority={i === 0}

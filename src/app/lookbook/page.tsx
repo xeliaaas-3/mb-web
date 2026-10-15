@@ -4,7 +4,8 @@ import { PageHeader } from "@/components/PageHeader";
 import { ProductCard } from "@/components/ProductCard";
 import { looks } from "@/lib/content";
 import { formatGs } from "@/lib/format";
-import { getProduct } from "@/lib/products";
+import { getProducts } from "@/lib/catalog";
+import { findProduct } from "@/lib/products";
 
 export const metadata: Metadata = {
   title: "Lookbook",
@@ -12,7 +13,8 @@ export const metadata: Metadata = {
   alternates: { canonical: "/lookbook" },
 };
 
-export default function LookbookPage() {
+export default async function LookbookPage() {
+  const products = await getProducts();
   return (
     <>
       <PageHeader eyebrowText="Lookbook" title="ideas para vestirte">
@@ -21,7 +23,7 @@ export default function LookbookPage() {
 
       <div className="page-width space-y-section page-x pb-section">
         {looks.map((look, i) => {
-          const items = look.products.map((slug) => getProduct(slug)!);
+          const items = look.products.flatMap((slug) => findProduct(products, slug) ?? []);
           const total = items.reduce((n, p) => n + p.price, 0);
           return (
             <section key={look.id} id={look.id} aria-labelledby={`look-${look.id}`} className="scroll-mt-24">

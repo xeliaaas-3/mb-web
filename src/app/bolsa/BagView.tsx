@@ -1,6 +1,7 @@
 "use client";
 
 import Image from "next/image";
+import { isOptimizable } from "@/lib/images";
 import Link from "next/link";
 import { useState, useSyncExternalStore, type ReactNode } from "react";
 import { ChevronDown, Minus, Plus, RefreshCw, Send, ShieldCheck, Smile, Store, Trash2, Truck } from "lucide-react";
@@ -208,6 +209,7 @@ export function BagView() {
                 >
                   <Image
                     src={imageFor(item.product, item.color).src}
+                    unoptimized={!isOptimizable(imageFor(item.product, item.color).src)}
                     alt={imageFor(item.product, item.color).alt}
                     fill
                     sizes="112px"
@@ -238,7 +240,7 @@ export function BagView() {
                         type="button"
                         aria-label="Restar una unidad"
                         disabled={item.qty <= 1}
-                        onClick={() => cart.setQty(item.key, item.qty - 1)}
+                        onClick={() => cart.setQty(item.key, item.qty - 1, item.maxQty)}
                         className="flex size-9 items-center justify-center disabled:text-stone"
                       >
                         <Minus size={14} strokeWidth={1.25} />
@@ -250,7 +252,7 @@ export function BagView() {
                         type="button"
                         aria-label="Sumar una unidad"
                         disabled={item.qty >= item.maxQty}
-                        onClick={() => cart.setQty(item.key, item.qty + 1)}
+                        onClick={() => cart.setQty(item.key, item.qty + 1, item.maxQty)}
                         className="flex size-9 items-center justify-center disabled:text-stone"
                       >
                         <Plus size={14} strokeWidth={1.25} />

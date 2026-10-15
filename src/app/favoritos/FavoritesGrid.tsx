@@ -8,11 +8,13 @@ import { WhatsAppIcon } from "@/components/WhatsAppIcon";
 import { useFavorites } from "@/lib/favorites";
 import { formatGs } from "@/lib/format";
 import { capitalize } from "@/lib/order";
-import { getProduct } from "@/lib/products";
+import { findProduct } from "@/lib/products";
+import { useProducts } from "@/components/CatalogProvider";
 import { whatsappLink } from "@/lib/site";
 
 export function FavoritesGrid() {
-  const items = useFavorites().map((slug) => getProduct(slug)!);
+  const products = useProducts();
+  const items = useFavorites().map((slug) => findProduct(products, slug)!);
 
   if (items.length === 0) {
     return (

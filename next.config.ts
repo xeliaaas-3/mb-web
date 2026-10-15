@@ -1,9 +1,11 @@
 import type { NextConfig } from "next";
+import { optimizedImageHosts } from "./src/lib/images";
 
 const nextConfig: NextConfig = {
   images: {
-    // Fotos de ejemplo de Unsplash. Al pasar a fotos propias, servirlas desde /public o un CDN.
-    remotePatterns: [{ protocol: "https", hostname: "images.unsplash.com" }],
+    // Unsplash (fotos de ejemplo), Google Drive (fotos pegadas en la planilla), Cloudinary e ImgBB.
+    // Otros hosts se muestran sin optimizar (ver isOptimizable en src/lib/images.ts).
+    remotePatterns: optimizedImageHosts.map((hostname) => ({ protocol: "https" as const, hostname })),
   },
 };
 

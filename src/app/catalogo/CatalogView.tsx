@@ -7,13 +7,12 @@ import { ProductCard } from "@/components/ProductCard";
 import { button, eyebrow } from "@/components/ui";
 import { WhatsAppIcon } from "@/components/WhatsAppIcon";
 import { formatGs } from "@/lib/format";
-import { categories, categoryOf, collections, groups, products, type Product } from "@/lib/products";
+import { useProducts } from "@/components/CatalogProvider";
+import { categories, categoryOf, collections, groups, type Product } from "@/lib/products";
 import { whatsappLink } from "@/lib/site";
 
 const PAGE_SIZE = 8;
 const PRICE_STEP = 10000;
-const maxCatalogPrice = Math.ceil(Math.max(...products.map((p) => p.price)) / 50000) * 50000;
-const minCatalogPrice = Math.floor(Math.min(...products.map((p) => p.price)) / 50000) * 50000;
 
 const sorts = {
   novedades: { label: "Novedades", fn: (a: Product, b: Product) => b.addedAt - a.addedAt },
@@ -23,12 +22,16 @@ const sorts = {
 } as const;
 type SortId = keyof typeof sorts;
 
-const allSizes = [...new Set(products.flatMap((p) => p.sizes.map((s) => s.label)))];
-const allColors = [...new Map(products.flatMap((p) => p.colors).map((c) => [c.name, c])).values()];
-
 const normalize = (s: string) => s.toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g, "");
 
 export function CatalogView() {
+  const products = useProducts();
+  const prices = products.map((p) => p.price);
+  const maxCatalogPrice = Math.ceil(Math.max(...prices, 50000) / 50000) * 50000;
+  const minCatalogPrice = Math.floor(Math.min(...prices, maxCatalogPrice) / 50000) * 50000;
+  const allSizes = [...new Set(products.flatMap((p) => p.sizes.map((s) => s.label)))];
+  const allColors = [...new Map(products.flatMap((p) => p.colors).map((c) => [c.name, c])).values()];
+
   const params = useSearchParams();
   const router = useRouter();
   const pathname = usePathname();

@@ -1,7 +1,7 @@
 "use client";
 
 import { useSyncExternalStore } from "react";
-import { getProduct } from "./products";
+import { useProducts } from "@/components/CatalogProvider";
 
 const STORAGE_KEY = "alba-favoritos-v1";
 const EMPTY: string[] = [];
@@ -15,7 +15,7 @@ function load() {
   loaded = true;
   try {
     const parsed: unknown = JSON.parse(window.localStorage.getItem(STORAGE_KEY) ?? "[]");
-    if (Array.isArray(parsed)) slugs = parsed.filter((s): s is string => typeof s === "string" && !!getProduct(s));
+    if (Array.isArray(parsed)) slugs = parsed.filter((s): s is string => typeof s === "string");
   } catch {
     slugs = EMPTY;
   }
@@ -53,8 +53,10 @@ export const favorites = {
   },
 };
 
+/** Favoritos que siguen existiendo en el catálogo. */
 export function useFavorites() {
-  return useSyncExternalStore(
+  const products = useProducts();
+  const saved = useSyncExternalStore(
     subscribe,
     () => {
       load();
@@ -62,4 +64,5 @@ export function useFavorites() {
     },
     () => EMPTY,
   );
+  return saved.filter((slug) => products.some((p) => p.slug === slug));
 }

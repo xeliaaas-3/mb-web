@@ -152,6 +152,17 @@ const C = {
   pastel: { name: "Lila", hex: "#c8b9e0" },
 } satisfies Record<string, Color>;
 
+/** Colores conocidos por nombre (sin acentos, en minúscula), para la planilla. */
+export const namedColors: Record<string, Color> = Object.fromEntries(
+  Object.values(C).map((c) => [
+    c.name
+      .toLowerCase()
+      .normalize("NFD")
+      .replace(/[\u0300-\u036f]/g, ""),
+    c,
+  ]),
+);
+
 const ropa = (s: number, m: number, l: number, xl = 0): Size[] => [
   { label: "S", stock: s },
   { label: "M", stock: m },
@@ -164,7 +175,8 @@ const calzado = (stock: [number, number, number, number, number, number]): Size[
   ["35", "36", "37", "38", "39", "40"].map((label, i) => ({ label, stock: stock[i] }));
 const unico = (stock: number): Size[] => [{ label: "Único", stock }];
 
-export const products: Product[] = [
+/** Catálogo de ejemplo: se usa cuando no hay planilla configurada o la planilla falla. */
+export const sampleProducts: Product[] = [
   // ——— Vestidos ———
   {
     slug: "vestido-recto-lino-natural",
@@ -899,7 +911,7 @@ export const products: Product[] = [
   },
 ];
 
-export function getProduct(slug: string) {
+export function findProduct(products: Product[], slug: string) {
   return products.find((p) => p.slug === slug);
 }
 
@@ -919,5 +931,7 @@ export function imageFor(p: Product, color: string) {
   return p.images.find((i) => i.color === color) ?? p.images[0];
 }
 
-export const newest = (n: number) => [...products].sort((a, b) => b.addedAt - a.addedAt).slice(0, n);
-export const bestSellers = (n: number) => [...products].sort((a, b) => b.sold - a.sold).slice(0, n);
+export const newest = (products: Product[], n: number) =>
+  [...products].sort((a, b) => b.addedAt - a.addedAt).slice(0, n);
+export const bestSellers = (products: Product[], n: number) =>
+  [...products].sort((a, b) => b.sold - a.sold).slice(0, n);

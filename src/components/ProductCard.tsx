@@ -1,12 +1,13 @@
 "use client";
 
 import Image from "next/image";
+import { isOptimizable } from "@/lib/images";
 import Link from "next/link";
 import { useState } from "react";
 import { ShoppingBag } from "lucide-react";
 import { trackEvent } from "@/lib/analytics";
 import { bagDrawer } from "@/lib/bagDrawer";
-import { cart } from "@/lib/cart";
+import { cart, stockOf } from "@/lib/cart";
 import { formatGs } from "@/lib/format";
 import { badgeLabel, inStock, type Product } from "@/lib/products";
 import { FavoriteButton } from "./FavoriteButton";
@@ -19,7 +20,7 @@ export function ProductCard({ product, priority = false }: { product: Product; p
   const [front, back] = product.images;
 
   function add() {
-    cart.add({ slug: product.slug, size, color: product.colors[0].name });
+    cart.add({ slug: product.slug, size, color: product.colors[0].name }, stockOf(product, size));
     trackEvent("add_to_cart", { product: product.slug, size, value: product.price });
     bagDrawer.open();
   }
@@ -30,6 +31,7 @@ export function ProductCard({ product, priority = false }: { product: Product; p
         <Link href={href} tabIndex={-1} aria-hidden="true">
           <Image
             src={front.src}
+            unoptimized={!isOptimizable(front.src)}
             alt={front.alt}
             fill
             priority={priority}
@@ -39,6 +41,7 @@ export function ProductCard({ product, priority = false }: { product: Product; p
           {back && (
             <Image
               src={back.src}
+              unoptimized={!isOptimizable(back.src)}
               alt=""
               fill
               sizes="(min-width: 1024px) 25vw, (min-width: 768px) 33vw, 50vw"

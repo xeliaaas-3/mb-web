@@ -9,8 +9,9 @@ import { button, card, eyebrow, sectionTitle } from "@/components/ui";
 import { WhatsAppIcon } from "@/components/WhatsAppIcon";
 import { benefits, looks, reviews } from "@/lib/content";
 import { formatGs } from "@/lib/format";
-import { photo } from "@/lib/images";
-import { bestSellers, categories, categoryOf, collections, getProduct, newest, products } from "@/lib/products";
+import { isOptimizable, photo } from "@/lib/images";
+import { getProducts } from "@/lib/catalog";
+import { bestSellers, categories, categoryOf, collections, findProduct, newest } from "@/lib/products";
 import { site, whatsappLink } from "@/lib/site";
 import { storeJsonLd } from "@/lib/structuredData";
 
@@ -65,15 +66,16 @@ function SectionHeader({
 
 const productGrid = "mt-8 grid grid-cols-2 gap-x-gutter-mobile gap-y-10 md:gap-x-gutter lg:grid-cols-4";
 
-export default function Home() {
+export default async function Home() {
+  const products = await getProducts();
   const look = looks[0];
-  const lookProducts = look.products.map((slug) => getProduct(slug)!);
+  const lookProducts = look.products.flatMap((slug) => findProduct(products, slug) ?? []);
   const accessories = [...products]
     .filter((p) => categoryOf(p).group === "accesorios")
     .sort((a, b) => b.sold - a.sold)
     .slice(0, 4);
   const sale = products.filter((p) => p.compareAt);
-  const maxDiscount = Math.max(...sale.map((p) => Math.round((1 - p.price / p.compareAt!) * 100)));
+  const maxDiscount = Math.max(0, ...sale.map((p) => Math.round((1 - p.price / p.compareAt!) * 100)));
   const featuredCollections = collections.filter((c) => ["verano", "fiesta", "oficina", "tejidos"].includes(c.id));
 
   return (
@@ -149,12 +151,14 @@ export default function Home() {
           {categories.map((c) => {
             const items = products.filter((p) => p.category === c.id);
             const cover = [...items].sort((a, b) => b.sold - a.sold)[0];
+            if (!cover) return null;
             return (
               <li key={c.id} className="w-[38vw] shrink-0 snap-start sm:w-48">
                 <Link href={`/catalogo?categoria=${c.id}`} className="group block">
                   <div className="relative aspect-[3/4] overflow-hidden rounded-2xl bg-sand shadow-soft">
                     <Image
                       src={cover.images[0].src}
+                      unoptimized={!isOptimizable(cover.images[0].src)}
                       alt=""
                       fill
                       sizes="(min-width: 640px) 192px, 38vw"
@@ -182,7 +186,7 @@ export default function Home() {
             href="/catalogo?coleccion=nuevos"
           />
           <div className={productGrid}>
-            {newest(8).map((p, i) => (
+            {newest(products, 8).map((p, i) => (
               <ProductCard key={p.slug} product={p} priority={i < 2} />
             ))}
           </div>
@@ -230,7 +234,7 @@ export default function Home() {
             href="/catalogo?orden=mas-vendidos"
           />
           <div className={productGrid}>
-            {bestSellers(4).map((p) => (
+            {bestSellers(products, 4).map((p) => (
               <ProductCard key={p.slug} product={p} />
             ))}
           </div>

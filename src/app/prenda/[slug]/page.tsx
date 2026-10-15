@@ -6,20 +6,23 @@ import { JsonLd } from "@/components/JsonLd";
 import { ProductCard } from "@/components/ProductCard";
 import { eyebrow } from "@/components/ui";
 import { formatGs } from "@/lib/format";
-import { categories, categoryOf, getProduct, inStock, products } from "@/lib/products";
+import { getProducts } from "@/lib/catalog";
+import { categories, categoryOf, findProduct, inStock, type Product } from "@/lib/products";
 import { site } from "@/lib/site";
 import { productJsonLd } from "@/lib/structuredData";
 import { Gallery } from "./Gallery";
 import { PurchasePanel } from "./PurchasePanel";
 
-export const dynamicParams = false;
+// Prendas nuevas de la planilla se generan al primer pedido; las que se borran dan 404.
+export const dynamicParams = true;
+export const revalidate = 300;
 
-export function generateStaticParams() {
-  return products.map((p) => ({ slug: p.slug }));
+export async function generateStaticParams() {
+  return (await getProducts()).map((p) => ({ slug: p.slug }));
 }
 
 export async function generateMetadata({ params }: PageProps<"/prenda/[slug]">): Promise<Metadata> {
-  const product = getProduct((await params).slug);
+  const product = findProduct(await getProducts(), (await params).slug);
   if (!product) return {};
   const title = product.name.charAt(0).toUpperCase() + product.name.slice(1);
   return {
@@ -31,13 +34,14 @@ export async function generateMetadata({ params }: PageProps<"/prenda/[slug]">):
 }
 
 export default async function ProductPage({ params }: PageProps<"/prenda/[slug]">) {
-  const product = getProduct((await params).slug);
+  const products = await getProducts();
+  const product = findProduct(products, (await params).slug);
   if (!product) notFound();
 
   const category = categories.find((c) => c.id === product.category)!;
   const isApparel = category.group === "ropa";
   // Completá tu look: accesorios para la ropa y ropa para los accesorios, priorizando la misma colección.
-  const sharesCollection = (p: (typeof products)[number]) => p.collections.some((c) => product.collections.includes(c));
+  const sharesCollection = (p: Product) => p.collections.some((c) => product.collections.includes(c));
   const complements = products
     .filter((p) => categoryOf(p).group !== category.group && inStock(p))
     .sort((a, b) => Number(sharesCollection(b)) - Number(sharesCollection(a)) || b.sold - a.sold)

@@ -1,7 +1,8 @@
 "use client";
 
 import { useSyncExternalStore } from "react";
-import { getProduct, type Product } from "./products";
+import { useProducts } from "@/components/CatalogProvider";
+import { findProduct, type Product } from "./products";
 
 export type CartLine = { slug: string; size: string; color: string; qty: number };
 export type ResolvedLine = CartLine & { key: string; product: Product; lineTotal: number; maxQty: number };
@@ -28,8 +29,7 @@ function load() {
           typeof l?.size === "string" &&
           typeof l?.color === "string" &&
           Number.isInteger(l?.qty) &&
-          l.qty > 0 &&
-          !!getProduct(l.slug),
+          l.qty > 0,
       );
     }
   } catch {
@@ -67,26 +67,22 @@ function getSnapshot() {
   return lines;
 }
 
-function maxQtyFor(slug: string, size: string) {
-  return getProduct(slug)?.sizes.find((s) => s.label === size)?.stock ?? 0;
-}
+export const stockOf = (product: Product, size: string) => product.sizes.find((s) => s.label === size)?.stock ?? 0;
 
 export const cart = {
-  add(item: Omit<CartLine, "qty">, qty = 1) {
+  /** `maxQty` es el stock del talle elegido: la bolsa nunca supera ese número. */
+  add(item: Omit<CartLine, "qty">, maxQty: number, qty = 1) {
     load();
     const key = lineKey(item);
-    const max = maxQtyFor(item.slug, item.size);
     const existing = lines.find((l) => lineKey(l) === key);
     if (existing) {
-      commit(lines.map((l) => (l === existing ? { ...l, qty: Math.min(l.qty + qty, max) } : l)));
+      commit(lines.map((l) => (l === existing ? { ...l, qty: Math.min(l.qty + qty, maxQty) } : l)));
     } else {
-      commit([...lines, { ...item, qty: Math.min(qty, max) }]);
+      commit([...lines, { ...item, qty: Math.min(qty, maxQty) }]);
     }
   },
-  setQty(key: string, qty: number) {
-    commit(
-      lines.map((l) => (lineKey(l) === key ? { ...l, qty: Math.max(1, Math.min(qty, maxQtyFor(l.slug, l.size))) } : l)),
-    );
+  setQty(key: string, qty: number, maxQty: number) {
+    commit(lines.map((l) => (lineKey(l) === key ? { ...l, qty: Math.max(1, Math.min(qty, maxQty)) } : l)));
   },
   remove(key: string) {
     commit(lines.filter((l) => lineKey(l) !== key));
@@ -96,15 +92,18 @@ export const cart = {
   },
 };
 
+/** Bolsa con precios y stock actuales del catálogo. Las prendas que ya no existen se ignoran. */
 export function useCart() {
+  const products = useProducts();
   const raw = useSyncExternalStore(subscribe, getSnapshot, () => EMPTY);
-  const items: ResolvedLine[] = raw.map((l) => {
-    const product = getProduct(l.slug)!;
-    return { ...l, key: lineKey(l), product, lineTotal: product.price * l.qty, maxQty: maxQtyFor(l.slug, l.size) };
+  const items: ResolvedLine[] = raw.flatMap((l) => {
+    const product = findProduct(products, l.slug);
+    if (!product) return [];
+    return [{ ...l, key: lineKey(l), product, lineTotal: product.price * l.qty, maxQty: stockOf(product, l.size) }];
   });
   return {
     items,
-    count: raw.reduce((n, l) => n + l.qty, 0),
+    count: items.reduce((n, l) => n + l.qty, 0),
     subtotal: items.reduce((n, l) => n + l.lineTotal, 0),
   };
 }
