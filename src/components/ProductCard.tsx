@@ -3,33 +3,27 @@
 import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
-import { X } from "lucide-react";
+import { ShoppingBag } from "lucide-react";
+import { bagDrawer } from "@/lib/bagDrawer";
 import { cart } from "@/lib/cart";
 import { formatGs } from "@/lib/format";
 import { badgeLabel, inStock, type Product } from "@/lib/products";
-import { showToast } from "@/lib/toast";
+import { card } from "./ui";
 
 export function ProductCard({ product, priority = false }: { product: Product; priority?: boolean }) {
-  const [picking, setPicking] = useState(false);
-  const available = inStock(product);
+  const available = product.sizes.filter((s) => s.stock > 0);
+  const [size, setSize] = useState(available[0]?.label ?? "");
   const href = `/prenda/${product.slug}`;
   const [front, back] = product.images;
 
-  function add(size: string) {
+  function add() {
     cart.add({ slug: product.slug, size, color: product.colors[0].name });
-    setPicking(false);
-    showToast({ message: `Agregaste ${product.name} (talle ${size}).`, href: "/bolsa", action: "Ver bolsa" });
-  }
-
-  function onQuickAdd() {
-    const sizes = product.sizes.filter((s) => s.stock > 0);
-    if (sizes.length === 1) add(sizes[0].label);
-    else setPicking(true);
+    bagDrawer.open();
   }
 
   return (
-    <article className="group flex flex-col">
-      <div className="relative aspect-[3/4] overflow-hidden bg-sand">
+    <article className={`group flex flex-col p-2.5 sm:p-3 ${card}`}>
+      <div className="relative aspect-[3/4] overflow-hidden rounded-xl bg-sand">
         <Link href={href} tabIndex={-1} aria-hidden="true">
           <Image
             src={front.src}
@@ -37,7 +31,7 @@ export function ProductCard({ product, priority = false }: { product: Product; p
             fill
             priority={priority}
             sizes="(min-width: 1024px) 25vw, (min-width: 768px) 33vw, 50vw"
-            className="object-cover transition-opacity duration-700 ease-editorial"
+            className="object-cover transition-transform duration-700 ease-editorial group-hover:scale-105"
           />
           {back && (
             <Image
@@ -51,68 +45,63 @@ export function ProductCard({ product, priority = false }: { product: Product; p
         </Link>
         {product.badge && (
           <span
-            className={`absolute top-2 left-2 px-2 py-1 label-caps-sm ${
+            className={`absolute top-2 left-2 rounded-sm px-2 py-0.5 label-caps-sm ${
               product.badge === "oferta" ? "bg-bronze text-white" : "bg-ink text-white"
             }`}
           >
             {badgeLabel[product.badge]}
           </span>
         )}
-
-        {picking && (
-          <div className="absolute inset-x-0 bottom-0 animate-[fade-in_300ms] bg-white/95 p-3 backdrop-blur-sm">
-            <div className="mb-2 flex items-center justify-between">
-              <span className="label-caps-sm">Elegí tu talle</span>
-              <button type="button" aria-label="Cancelar" onClick={() => setPicking(false)} className="-m-1 p-1">
-                <X size={14} strokeWidth={1.25} />
-              </button>
-            </div>
-            <div className="flex flex-wrap gap-1.5">
-              {product.sizes.map((s) => (
-                <button
-                  key={s.label}
-                  type="button"
-                  disabled={s.stock === 0}
-                  onClick={() => add(s.label)}
-                  className="h-9 min-w-9 border border-hairline px-2 label-caps-sm transition-colors hover:border-ink hover:bg-ink hover:text-white disabled:text-stone disabled:line-through disabled:hover:border-hairline disabled:hover:bg-transparent"
-                >
-                  {s.label}
-                </button>
-              ))}
-            </div>
-          </div>
-        )}
       </div>
 
-      <div
-        className="mt-3 flex items-center gap-1.5"
-        aria-label={`Colores: ${product.colors.map((c) => c.name).join(", ")}`}
-      >
-        {product.colors.map((c) => (
-          <span key={c.name} className="size-2.5 rounded-full border border-hairline" style={{ background: c.hex }} />
-        ))}
-      </div>
-      <h3 className="mt-2 font-serif text-title lowercase italic">
-        <Link href={href} className="link-editorial">
+      <h3 className="mt-3 truncate font-serif text-[15px] leading-snug italic md:text-title">
+        <Link href={href} className="hover:underline hover:underline-offset-4">
           {product.name}
         </Link>
       </h3>
-      <p className="mt-1 flex flex-wrap items-baseline gap-x-2 text-price">
+      <p className="mt-1 flex flex-wrap items-baseline gap-x-2 text-body-sm font-semibold md:text-price">
         {formatGs(product.price)}
         {product.compareAt && (
-          <s className="text-body-sm text-stone-text">
+          <s className="text-body-sm font-normal text-stone-text">
             <span className="sr-only">Antes </span>
             {formatGs(product.compareAt)}
           </s>
         )}
       </p>
+
+      {inStock(product) && (
+        <div className="mt-2.5 flex flex-wrap items-center gap-1" role="group" aria-label="Talle">
+          <span className="mr-1 text-[10px] text-stone-text">Talles:</span>
+          {product.sizes.map((s) => (
+            <button
+              key={s.label}
+              type="button"
+              disabled={s.stock === 0}
+              aria-pressed={size === s.label}
+              onClick={() => setSize(s.label)}
+              className={`min-w-6 rounded-sm border px-1.5 py-0.5 text-[10px] transition-colors ${
+                size === s.label ? "border-ink bg-ink text-white" : "border-hairline text-ink hover:border-ink"
+              } disabled:text-stone disabled:line-through disabled:hover:border-hairline`}
+            >
+              {s.label}
+            </button>
+          ))}
+        </div>
+      )}
+
       <button
         type="button"
-        onClick={onQuickAdd}
-        disabled={!available}
-        className="mt-3 h-10 bg-ink label-caps text-white transition-colors duration-300 hover:bg-bronze disabled:bg-sand-deep disabled:text-stone-text"
+        onClick={add}
+        disabled={!size}
+        className="mt-3 flex w-full items-center justify-center gap-1.5 rounded-lg bg-ink py-2.5 text-[10px] font-semibold tracking-[0.15em] text-white uppercase transition-colors hover:bg-bronze disabled:bg-sand-deep disabled:text-stone-text"
       >
-        {available ? "Añadir" : "Agotado"}
+        {size ? (
+          <>
+            <ShoppingBag size={12} strokeWidth={1.75} /> Añadir a bolsa
+          </>
+        ) : (
+          "Agotado"
+        )}
       </button>
     </article>
   );

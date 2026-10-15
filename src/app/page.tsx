@@ -1,8 +1,9 @@
 import Image from "next/image";
 import Link from "next/link";
-import { ArrowUpRight, MapPin, Star } from "lucide-react";
+import { ArrowUpRight, MapPin, Ruler, Star } from "lucide-react";
 import { ProductCard } from "@/components/ProductCard";
-import { button, eyebrow, sectionTitle } from "@/components/ui";
+import { SizeAssistant } from "@/components/SizeAssistant";
+import { button, card, eyebrow, sectionTitle } from "@/components/ui";
 import { WhatsAppIcon } from "@/components/WhatsAppIcon";
 import { formatGs } from "@/lib/format";
 import { img } from "@/lib/images";
@@ -80,9 +81,9 @@ export default function Home() {
             <Link href="/catalogo" className={button.light}>
               Ver colección
             </Link>
-            <Link href="/catalogo?orden=novedades" className={button.ghostLight}>
-              Novedades atelier
-            </Link>
+            <SizeAssistant className={button.ghostLight}>
+              <Ruler size={14} strokeWidth={1.5} /> ¿Cuál es mi talle?
+            </SizeAssistant>
           </div>
         </div>
       </section>
@@ -104,7 +105,7 @@ export default function Home() {
             return (
               <li key={c.id} className="w-[42vw] shrink-0 snap-start md:w-auto">
                 <Link href={`/catalogo?coleccion=${c.id}`} className="group block">
-                  <div className="relative aspect-[3/4] overflow-hidden bg-sand">
+                  <div className="relative aspect-[3/4] overflow-hidden rounded-2xl bg-sand shadow-soft">
                     <Image
                       src={c.image}
                       alt={c.alt}
@@ -164,7 +165,7 @@ export default function Home() {
             </h2>
           </div>
           <div className="lg:col-span-7">
-            <ol className="divide-y divide-hairline border-y border-hairline">
+            <ol className={`divide-y divide-hairline px-5 ${card}`}>
               {steps.map((s, i) => (
                 <li key={s.title} className="flex gap-6 py-6">
                   <span className="font-serif text-headline-sm italic">{String(i + 1).padStart(2, "0")}</span>
@@ -197,7 +198,7 @@ export default function Home() {
         <div className="mt-8 grid items-center gap-8 md:grid-cols-12 md:gap-gutter">
           <Link
             href={`/prenda/${featured.slug}`}
-            className="relative aspect-[4/5] overflow-hidden bg-sand md:col-span-7"
+            className="relative aspect-[4/5] overflow-hidden rounded-2xl bg-sand shadow-soft md:col-span-7"
           >
             <Image
               src={featured.images[0].src}
@@ -206,7 +207,9 @@ export default function Home() {
               sizes="(min-width: 768px) 58vw, 100vw"
               className="object-cover"
             />
-            <span className="absolute top-3 left-3 bg-white px-2 py-1 label-caps-sm">Best seller</span>
+            <span className="absolute top-3 left-3 rounded-sm bg-ink px-2 py-1 label-caps-sm text-white">
+              Best seller
+            </span>
           </Link>
           <div className="md:col-span-5 md:pl-8">
             <p className="label-caps-sm text-bronze">Prenda icónica</p>
@@ -242,7 +245,7 @@ export default function Home() {
           </h2>
           <div className="mt-8 grid gap-gutter-mobile md:grid-cols-2 md:gap-gutter">
             {reviews.map((r) => (
-              <figure key={r.name} className="border border-hairline bg-white p-6 md:p-8">
+              <figure key={r.name} className={`p-6 md:p-8 ${card}`}>
                 <div className="flex gap-0.5" aria-label="5 de 5 estrellas">
                   {Array.from({ length: 5 }, (_, i) => (
                     <Star key={i} size={14} strokeWidth={1} className="fill-ink" />
@@ -279,7 +282,7 @@ export default function Home() {
         </div>
         <ul className="mt-8 grid grid-cols-3 gap-1 md:grid-cols-6">
           {instagram.map((p) => (
-            <li key={p.src} className="relative aspect-square overflow-hidden bg-sand">
+            <li key={p.src} className="relative aspect-square overflow-hidden rounded-xl bg-sand">
               <Image src={p.src} alt={p.alt} fill sizes="(min-width: 768px) 16vw, 33vw" className="object-cover" />
             </li>
           ))}
@@ -297,7 +300,7 @@ export default function Home() {
             <p className="mt-4 text-body-lg text-stone-text">
               Un espacio íntimo y acogedor, creado para probarte tus prendas preferidas con asesoramiento exclusivo.
             </p>
-            <dl className="mt-8 divide-y divide-hairline border-y border-hairline text-body-md">
+            <dl className={`mt-8 divide-y divide-hairline px-5 text-body-md ${card}`}>
               {[
                 ["Dirección", `${site.address.street}, ${site.address.detail}, ${site.address.city}`],
                 ["Horarios", site.hours],
@@ -320,7 +323,7 @@ export default function Home() {
               Cómo llegar al atelier
             </a>
           </div>
-          <div className="relative min-h-80 border border-hairline lg:col-span-7">
+          <div className="relative min-h-80 overflow-hidden rounded-2xl border border-hairline shadow-soft lg:col-span-7">
             <iframe
               title="Mapa del atelier en Villa Morra, Asunción"
               src={`https://www.google.com/maps?q=${encodeURIComponent(site.address.mapsQuery)}&output=embed`}

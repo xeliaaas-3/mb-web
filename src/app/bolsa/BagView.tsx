@@ -153,7 +153,7 @@ export function BagView() {
       <div className="mt-8 grid gap-10 lg:grid-cols-12 lg:gap-gutter">
         <div className="space-y-8 lg:col-span-7">
           {/* Envío gratis */}
-          <div className="border border-hairline bg-sand p-4">
+          <div className="rounded-2xl border border-hairline bg-sand p-4">
             <p className="flex items-start gap-3 text-body-md">
               <Truck size={18} strokeWidth={1.25} className="mt-0.5 shrink-0" />
               {missingForFree > 0 ? (
@@ -168,7 +168,7 @@ export function BagView() {
               )}
             </p>
             <div
-              className="mt-3 h-0.5 bg-sand-deep"
+              className="mt-3 h-1 overflow-hidden rounded-full bg-sand-deep"
               role="progressbar"
               aria-label="Progreso hacia el envío gratis"
               aria-valuemin={0}
@@ -187,10 +187,13 @@ export function BagView() {
           </div>
 
           {/* Prendas */}
-          <ul className="divide-y divide-hairline border-y border-hairline" aria-label="Prendas en tu bolsa">
+          <ul className="space-y-3" aria-label="Prendas en tu bolsa">
             {items.map((item) => (
-              <li key={item.key} className="flex gap-4 py-5">
-                <Link href={`/prenda/${item.slug}`} className="relative aspect-[3/4] w-24 shrink-0 bg-sand md:w-28">
+              <li key={item.key} className="flex gap-4 rounded-2xl border border-hairline bg-card p-3 shadow-soft">
+                <Link
+                  href={`/prenda/${item.slug}`}
+                  className="relative aspect-[3/4] w-24 shrink-0 overflow-hidden rounded-xl bg-sand md:w-28"
+                >
                   <Image
                     src={imageFor(item.product, item.color).src}
                     alt={imageFor(item.product, item.color).alt}
@@ -218,7 +221,7 @@ export function BagView() {
                   </p>
                   {item.maxQty === 0 && <p className="mt-1 text-body-sm text-error">Sin stock en este talle.</p>}
                   <div className="mt-auto flex items-center justify-between pt-3">
-                    <div className="flex items-center border border-hairline">
+                    <div className="flex items-center rounded-full border border-hairline bg-card">
                       <button
                         type="button"
                         aria-label="Restar una unidad"
@@ -254,7 +257,7 @@ export function BagView() {
           )}
 
           {/* Datos */}
-          <section className="bg-sand p-5 md:p-8" aria-labelledby="datos-entrega">
+          <section className="rounded-2xl bg-sand p-5 md:p-8" aria-labelledby="datos-entrega">
             <div className="flex items-start justify-between">
               <div>
                 <p className={eyebrow}>Paso final</p>
@@ -303,7 +306,7 @@ export function BagView() {
                     return (
                       <label
                         key={o.id}
-                        className={`flex cursor-pointer gap-3 border bg-white p-4 transition-colors ${
+                        className={`flex cursor-pointer gap-3 rounded-xl border bg-card p-4 transition-colors ${
                           form.shipping === o.id ? "border-ink" : "border-hairline hover:border-stone"
                         }`}
                       >
@@ -361,7 +364,7 @@ export function BagView() {
                   {paymentMethods.map((m) => (
                     <label
                       key={m}
-                      className={`flex cursor-pointer items-center gap-3 border bg-white px-4 py-3 text-body-md transition-colors ${
+                      className={`flex cursor-pointer items-center gap-3 rounded-xl border bg-card px-4 py-3 text-body-md transition-colors ${
                         form.payment === m ? "border-ink" : "border-hairline hover:border-stone"
                       }`}
                     >
@@ -396,7 +399,7 @@ export function BagView() {
         {/* Resumen */}
         <aside className="lg:col-span-5">
           <div className="space-y-6 lg:sticky lg:top-28">
-            <dl className="border border-hairline bg-white p-5 text-body-md md:p-6">
+            <dl className="rounded-2xl border border-hairline bg-card p-5 text-body-md shadow-soft md:p-6">
               <div className="flex justify-between py-1">
                 <dt className="text-stone-text">Subtotal prendas ({count})</dt>
                 <dd>{formatGs(totals.subtotal)}</dd>
@@ -421,17 +424,17 @@ export function BagView() {
               </p>
             </div>
 
-            <details className="group border border-hairline bg-sand">
+            <details className="group overflow-hidden rounded-2xl border border-hairline bg-sand">
               <summary className="flex cursor-pointer list-none items-center justify-between px-5 py-4 label-caps-sm [&::-webkit-details-marker]:hidden">
                 Ver mensaje que enviaremos
                 <ChevronDown size={16} strokeWidth={1.25} className="transition-transform group-open:rotate-180" />
               </summary>
-              <pre className="mx-5 mb-5 bg-white p-4 font-sans text-body-sm whitespace-pre-wrap text-stone-text">
+              <pre className="mx-5 mb-5 rounded-xl bg-card p-4 font-sans text-body-sm whitespace-pre-wrap text-stone-text">
                 {buildOrderMessage(previewId, form, items)}
               </pre>
             </details>
 
-            <ul className="space-y-4 border border-hairline bg-white p-5 text-body-sm">
+            <ul className="space-y-4 rounded-2xl border border-hairline bg-card p-5 text-body-sm shadow-soft">
               {trust.map(({ Icon, title, body }) => (
                 <li key={title} className="flex gap-3">
                   <Icon size={18} strokeWidth={1.25} className="mt-0.5 shrink-0" />
@@ -450,7 +453,7 @@ export function BagView() {
 }
 
 const inputClass =
-  "h-12 w-full border-0 border-b border-stone bg-white px-3 text-body-md outline-none transition-[border-color,box-shadow] placeholder:text-stone-text/70 focus:border-ink focus:shadow-[0_1px_0_0_var(--color-ink)] aria-invalid:border-error";
+  "h-12 w-full rounded-lg border border-hairline bg-card px-4 text-body-md outline-none transition-[border-color,box-shadow] placeholder:text-stone-text/70 focus:border-ink focus:shadow-[0_0_0_1px_var(--color-ink)] aria-invalid:border-error";
 
 function Field({ id, label, error, children }: { id: string; label: string; error?: string; children: ReactNode }) {
   return (

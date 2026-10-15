@@ -78,7 +78,7 @@ export function CatalogView() {
 
   return (
     <div className="page-width page-x pt-6 pb-section md:pt-10">
-      <label className="flex h-12 items-center gap-3 border border-hairline bg-sand px-4 focus-within:border-ink">
+      <label className="flex h-12 items-center gap-3 rounded-xl border border-hairline bg-card px-4 shadow-soft focus-within:border-ink">
         <Search size={18} strokeWidth={1.25} className="text-stone-text" />
         <span className="sr-only">Buscar</span>
         <input
@@ -120,7 +120,7 @@ export function CatalogView() {
         <button
           type="button"
           onClick={() => update((p) => p.delete("coleccion"))}
-          className="mt-4 inline-flex items-center gap-2 border border-ink px-3 py-2 label-caps-sm"
+          className="mt-4 inline-flex items-center gap-2 rounded-full border border-ink px-3 py-2 label-caps-sm"
         >
           Colección: {collectionLabel} <X size={12} strokeWidth={1.5} />
         </button>
@@ -135,8 +135,8 @@ export function CatalogView() {
               type="button"
               aria-pressed={active}
               onClick={() => update((p) => (t.id ? p.set("categoria", t.id) : p.delete("categoria")))}
-              className={`h-10 shrink-0 border px-5 label-caps transition-colors ${
-                active ? "border-ink bg-ink text-white" : "border-hairline bg-sand hover:border-ink"
+              className={`h-10 shrink-0 rounded-full border px-5 label-caps transition-colors ${
+                active ? "border-ink bg-ink text-white" : "border-hairline bg-card hover:border-ink"
               }`}
             >
               {t.label}
@@ -193,7 +193,7 @@ export function CatalogView() {
             <Fragment key={p.slug}>
               <ProductCard product={p} priority={i < 2} />
               {i === 3 && results.length > 4 && (
-                <aside className="col-span-2 flex flex-col items-center justify-center bg-sand px-6 py-10 text-center lg:col-span-4">
+                <aside className="col-span-2 flex flex-col items-center justify-center rounded-2xl bg-sand px-6 py-10 text-center lg:col-span-4">
                   <p className={eyebrow}>Asesoría personalizada</p>
                   <h2 className="mt-2 font-serif text-headline-sm">¿Dudas con tu talle ideal?</h2>
                   <p className="mt-2 max-w-md text-body-md text-stone-text">
@@ -233,7 +233,7 @@ export function CatalogView() {
       <dialog
         ref={filtersRef}
         aria-label="Filtros"
-        className="fixed inset-y-0 right-0 left-auto m-0 h-dvh max-h-none w-full max-w-[420px] border-l border-hairline bg-white p-0 text-ink"
+        className="fixed inset-y-0 right-0 left-auto m-0 h-dvh max-h-none w-full max-w-[420px] bg-canvas p-0 text-ink shadow-drawer"
         onClick={(e) => e.target === e.currentTarget && e.currentTarget.close()}
       >
         <div className="flex h-full flex-col">
@@ -260,7 +260,7 @@ export function CatalogView() {
                       type="button"
                       aria-pressed={on}
                       onClick={() => toggleMulti("talle", s)}
-                      className={`h-11 min-w-11 border px-3 label-caps ${on ? "border-ink bg-ink text-white" : "border-hairline hover:border-ink"}`}
+                      className={`h-11 min-w-11 rounded-lg border px-3 label-caps ${on ? "border-ink bg-ink text-white" : "border-hairline hover:border-ink"}`}
                     >
                       {s}
                     </button>
@@ -279,7 +279,7 @@ export function CatalogView() {
                       type="button"
                       aria-pressed={on}
                       onClick={() => toggleMulti("color", c.name)}
-                      className={`inline-flex h-10 items-center gap-2 border px-3 text-body-sm ${on ? "border-ink" : "border-hairline hover:border-ink"}`}
+                      className={`inline-flex h-10 items-center gap-2 rounded-full border px-3 text-body-sm ${on ? "border-ink" : "border-hairline hover:border-ink"}`}
                     >
                       <span className="size-3 rounded-full border border-hairline" style={{ background: c.hex }} />
                       {c.name}

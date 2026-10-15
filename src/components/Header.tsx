@@ -4,6 +4,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useRef } from "react";
 import { Menu, Search, ShoppingBag, X } from "lucide-react";
+import { bagDrawer } from "@/lib/bagDrawer";
 import { useCart } from "@/lib/cart";
 import { site, whatsappLink } from "@/lib/site";
 import { Logo } from "./Logo";
@@ -27,7 +28,7 @@ export function Header() {
           WhatsApp
         </span>
       </p>
-      <header className="sticky top-0 z-40 border-b border-hairline bg-white/95 backdrop-blur-sm">
+      <header className="sticky top-0 z-40 border-b border-hairline bg-canvas/90 backdrop-blur-xl">
         <div className="page-width grid h-16 grid-cols-[1fr_auto_1fr] items-center page-x md:h-20">
           <div className="flex items-center gap-8">
             <button
@@ -56,8 +57,9 @@ export function Header() {
             <Link href="/catalogo?buscar=" aria-label="Buscar prendas" className="p-2">
               <Search size={20} strokeWidth={1.25} />
             </Link>
-            <Link
-              href="/bolsa"
+            <button
+              type="button"
+              onClick={bagDrawer.open}
               aria-label={`Bolsa de compras, ${count} ${count === 1 ? "prenda" : "prendas"}`}
               className="relative -mr-2 p-2"
             >
@@ -67,7 +69,7 @@ export function Header() {
                   {count}
                 </span>
               )}
-            </Link>
+            </button>
           </div>
         </div>
       </header>
@@ -75,7 +77,7 @@ export function Header() {
       <dialog
         ref={menuRef}
         aria-label="Menú"
-        className="fixed inset-y-0 left-0 m-0 h-dvh max-h-none w-full max-w-sm border-r border-hairline bg-white p-0 text-ink"
+        className="fixed inset-y-0 left-0 m-0 h-dvh max-h-none w-full max-w-xs border-r border-hairline bg-canvas p-0 text-ink shadow-drawer"
         onClick={(e) => e.target === e.currentTarget && e.currentTarget.close()}
       >
         <div className="flex h-full flex-col">

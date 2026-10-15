@@ -1,8 +1,9 @@
 "use client";
 
 import Link from "next/link";
-import { useRef, useState } from "react";
-import { RefreshCw, Ruler, ShoppingBag, Store, Truck, X } from "lucide-react";
+import { useState } from "react";
+import { RefreshCw, Ruler, ShoppingBag, Store, Truck } from "lucide-react";
+import { SizeAssistant } from "@/components/SizeAssistant";
 import { button } from "@/components/ui";
 import { WhatsAppIcon } from "@/components/WhatsAppIcon";
 import { cart } from "@/lib/cart";
@@ -10,21 +11,13 @@ import { formatGs } from "@/lib/format";
 import { capitalize } from "@/lib/order";
 import { totalStock, type Product } from "@/lib/products";
 import { site, whatsappLink } from "@/lib/site";
-import { showToast } from "@/lib/toast";
-
-const sizeGuide = [
-  ["S (36-38)", "86 - 90", "66 - 70", "92 - 96"],
-  ["M (40-42)", "92 - 96", "72 - 76", "98 - 102"],
-  ["L (44)", "98 - 104", "78 - 84", "104 - 110"],
-  ["XL (46)", "106 - 112", "86 - 92", "112 - 118"],
-];
+import { bagDrawer } from "@/lib/bagDrawer";
 
 export function PurchasePanel({ product }: { product: Product }) {
   const available = product.sizes.filter((s) => s.stock > 0);
   const [color, setColor] = useState(product.colors[0].name);
   const [size, setSize] = useState<string | null>(available.length === 1 ? available[0].label : null);
   const [sizeError, setSizeError] = useState(false);
-  const guideRef = useRef<HTMLDialogElement>(null);
   const stock = totalStock(product);
   const isApparel = product.category !== "accesorios";
 
@@ -37,7 +30,7 @@ export function PurchasePanel({ product }: { product: Product }) {
   function addToBag() {
     if (!requireSize()) return;
     cart.add({ slug: product.slug, size: size!, color });
-    showToast({ message: `${capitalize(product.name)} agregado a tu bolsa.`, href: "/bolsa", action: "Ver bolsa" });
+    bagDrawer.open();
   }
 
   const directMessage = `¡Hola! Quiero pedir ${capitalize(product.name)}${size ? `, talle ${size}` : ""}, color ${color} (${formatGs(product.price)}). ¿Está disponible?`;
@@ -64,7 +57,7 @@ export function PurchasePanel({ product }: { product: Product }) {
       </p>
 
       {stock > 0 && stock <= 5 && (
-        <p className="mt-4 flex items-center gap-2 border border-hairline bg-sand px-4 py-3 text-body-sm">
+        <p className="mt-4 flex items-center gap-2 rounded-xl border border-hairline bg-sand px-4 py-3 text-body-sm">
           <Store size={16} strokeWidth={1.25} className="shrink-0" />
           <span>
             En stock:{" "}
@@ -107,13 +100,9 @@ export function PurchasePanel({ product }: { product: Product }) {
             Talle: <span className="tracking-normal text-stone-text normal-case">{size ?? "elegí uno"}</span>
           </legend>
           {isApparel && (
-            <button
-              type="button"
-              onClick={() => guideRef.current?.showModal()}
-              className="inline-flex shrink-0 items-center gap-1.5 link-editorial label-caps-sm whitespace-nowrap"
-            >
-              <Ruler size={14} strokeWidth={1.25} /> Guía de medidas
-            </button>
+            <SizeAssistant className="inline-flex shrink-0 items-center gap-1.5 link-editorial label-caps-sm whitespace-nowrap">
+              <Ruler size={14} strokeWidth={1.25} /> ¿Cuál es mi talle?
+            </SizeAssistant>
           )}
         </div>
         <div className="mt-3 grid grid-cols-4 gap-2">
@@ -130,9 +119,9 @@ export function PurchasePanel({ product }: { product: Product }) {
                   setSize(s.label);
                   setSizeError(false);
                 }}
-                className={`h-12 border label-caps transition-colors ${
+                className={`h-12 rounded-lg border bg-card label-caps transition-colors ${
                   selected ? "border-ink bg-ink text-white" : "border-hairline hover:border-ink"
-                } disabled:cursor-not-allowed disabled:bg-[linear-gradient(to_top_right,transparent_calc(50%-0.5px),var(--color-stone)_50%,transparent_calc(50%+0.5px))] disabled:text-stone disabled:hover:border-hairline`}
+                } disabled:cursor-not-allowed disabled:bg-sand disabled:text-stone disabled:line-through disabled:hover:border-hairline`}
               >
                 {s.label}
               </button>
@@ -182,54 +171,6 @@ export function PurchasePanel({ product }: { product: Product }) {
           Ir a mi bolsa
         </Link>
       </p>
-
-      <dialog
-        ref={guideRef}
-        aria-labelledby="guia-titulo"
-        className="m-auto w-[calc(100%-2.5rem)] max-w-lg border border-hairline bg-white p-0 text-ink"
-        onClick={(e) => e.target === e.currentTarget && e.currentTarget.close()}
-      >
-        <div className="p-6">
-          <div className="flex items-center justify-between">
-            <h2 id="guia-titulo" className="font-serif text-headline-sm lowercase">
-              guía de medidas (cm)
-            </h2>
-            <button
-              type="button"
-              aria-label="Cerrar guía"
-              onClick={() => guideRef.current?.close()}
-              className="-mr-2 p-2"
-            >
-              <X size={18} strokeWidth={1.25} />
-            </button>
-          </div>
-          <table className="mt-6 w-full text-left text-body-md">
-            <thead>
-              <tr className="border-b border-ink label-caps-sm">
-                {["Talle", "Busto", "Cintura", "Cadera"].map((h) => (
-                  <th key={h} scope="col" className="py-3 font-semibold">
-                    {h}
-                  </th>
-                ))}
-              </tr>
-            </thead>
-            <tbody>
-              {sizeGuide.map(([t, ...rest]) => (
-                <tr key={t} className="border-b border-hairline">
-                  <th scope="row" className="py-3 font-medium">
-                    {t}
-                  </th>
-                  {rest.map((v) => (
-                    <td key={v} className="py-3 text-stone-text">
-                      {v}
-                    </td>
-                  ))}
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-      </dialog>
     </div>
   );
 }

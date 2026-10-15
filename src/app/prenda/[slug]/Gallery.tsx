@@ -25,12 +25,12 @@ export function Gallery({ product }: { product: Product }) {
       <div
         ref={trackRef}
         onScroll={onScroll}
-        className="no-scrollbar flex snap-x snap-mandatory overflow-x-auto lg:grid lg:grid-cols-2 lg:gap-2 lg:overflow-visible"
+        className="no-scrollbar flex snap-x snap-mandatory overflow-x-auto lg:grid lg:grid-cols-2 lg:gap-3 lg:overflow-visible"
       >
         {images.map((image, i) => (
           <div
             key={image.src}
-            className={`relative aspect-[4/5] w-full shrink-0 snap-center bg-sand ${i === 0 ? "lg:col-span-2" : ""}`}
+            className={`relative aspect-[4/5] w-full shrink-0 snap-center overflow-hidden bg-sand lg:rounded-2xl ${i === 0 ? "lg:col-span-2" : ""}`}
           >
             <Image
               src={image.src}
@@ -46,13 +46,13 @@ export function Gallery({ product }: { product: Product }) {
 
       <div className="pointer-events-none absolute top-3 left-3 flex flex-col items-start gap-1.5">
         {product.badge && (
-          <span className="bg-ink px-2 py-1 label-caps-sm text-white">{badgeLabel[product.badge]}</span>
+          <span className="rounded-sm bg-ink px-2 py-1 label-caps-sm text-white">{badgeLabel[product.badge]}</span>
         )}
-        <span className="border border-hairline bg-white px-2 py-1 label-caps-sm">{product.material}</span>
+        <span className="rounded-sm bg-white/90 px-2 py-1 label-caps-sm">{product.material}</span>
       </div>
 
       {images.length > 1 && (
-        <div className="absolute bottom-3 left-3 flex gap-1.5 bg-white/90 px-2 py-1.5 lg:hidden">
+        <div className="absolute bottom-3 left-3 flex gap-1.5 rounded-full bg-white/90 px-2.5 py-1.5 lg:hidden">
           {images.map((image, i) => (
             <button
               key={image.src}

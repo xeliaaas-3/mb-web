@@ -1,10 +1,9 @@
 import type { Metadata, Viewport } from "next";
-import { Inter, Montserrat, Playfair_Display } from "next/font/google";
-import { Suspense } from "react";
-import { BottomNav } from "@/components/BottomNav";
+import { Geist, Playfair_Display } from "next/font/google";
+import { FloatingWhatsApp } from "@/components/FloatingWhatsApp";
 import { Footer } from "@/components/Footer";
 import { Header } from "@/components/Header";
-import { ToastHost } from "@/components/ToastHost";
+import { BagDrawer } from "@/components/BagDrawer";
 import { site } from "@/lib/site";
 import "./globals.css";
 
@@ -14,8 +13,7 @@ const playfair = Playfair_Display({
   style: ["normal", "italic"],
   variable: "--font-playfair",
 });
-const inter = Inter({ subsets: ["latin"], weight: ["300", "400", "500", "600"], variable: "--font-inter" });
-const montserrat = Montserrat({ subsets: ["latin"], weight: ["500", "600"], variable: "--font-montserrat" });
+const geist = Geist({ subsets: ["latin"], variable: "--font-geist" });
 
 export const metadata: Metadata = {
   title: { default: `${site.name} | Moda femenina de autor en Paraguay`, template: `%s | ${site.name}` },
@@ -27,12 +25,12 @@ export const viewport: Viewport = {
   width: "device-width",
   initialScale: 1,
   viewportFit: "cover",
-  themeColor: "#ffffff",
+  themeColor: "#faf8f5",
 };
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang="es-PY" className={`${playfair.variable} ${inter.variable} ${montserrat.variable}`}>
+    <html lang="es-PY" className={`${playfair.variable} ${geist.variable}`}>
       <body className="min-h-dvh">
         <a
           href="#contenido"
@@ -43,10 +41,8 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
         <Header />
         <main id="contenido">{children}</main>
         <Footer />
-        <Suspense>
-          <BottomNav />
-        </Suspense>
-        <ToastHost />
+        <FloatingWhatsApp />
+        <BagDrawer />
       </body>
     </html>
   );

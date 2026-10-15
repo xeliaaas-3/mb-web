@@ -17,7 +17,8 @@ npm run build
 | `/prenda/[slug]` (generada estática por prenda) | `src/app/prenda/[slug]/` |
 | `/bolsa` bolsa + checkout por WhatsApp | `src/app/bolsa/BagView.tsx` |
 
-- **Tokens de diseño**: `src/app/globals.css` (`@theme`). Paleta, tipografías, radio 0 y utilidades `label-caps`, `page-x`, `link-editorial`.
+- **Tokens de diseño**: `src/app/globals.css` (`@theme`). Fondo crema, tarjetas blancas redondeadas, Playfair Display + Geist y utilidades `label-caps`, `page-x`, `link-editorial`.
+- **Bolsa lateral** (`src/components/BagDrawer.tsx`) y **asistente de talles** (`src/components/SizeAssistant.tsx`, medidas en `src/lib/sizes.ts`).
 - **Prendas, talles, stock y precios**: `src/lib/products.ts`.
 - **Datos del negocio** (WhatsApp, dirección, horarios, envíos, medios de pago, meta de envío gratis): `src/lib/site.ts`.
 - **Bolsa**: `src/lib/cart.ts`, guardada en `localStorage` del navegador.

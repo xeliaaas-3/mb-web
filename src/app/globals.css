@@ -1,37 +1,48 @@
 @import "tailwindcss";
 
 /*
- * Tokens de "Haute Editorial Boutique" (DESIGN.md), corregidos:
- * - Paleta según la descripción del sistema (#111 / #8A8580 / bronce #765C48 / arena #F5F1EC / blanco),
- *   no la paleta Material genérica que exportó Stitch.
- * - Radio 0 en todo; solo `rounded-full` queda para swatches y puntos.
- * - Se reemplaza la paleta por defecto de Tailwind para que no se cuelen colores fuera de marca.
+ * Tokens de la tienda. Base editorial de DESIGN.md (Stitch) suavizada con el estilo de referencia:
+ * fondo crema, tarjetas blancas con bordes redondeados y sombra leve, botones redondeados.
+ * Se reemplaza la paleta por defecto de Tailwind para que no se cuelen colores fuera de marca.
  */
 @theme {
   --color-*: initial;
   --color-white: #ffffff;
   --color-black: #000000;
 
-  --color-ink: #111111; /* primary: texto, CTAs, bordes activos */
+  --color-ink: #1c1917; /* primary: texto, CTAs, bordes activos */
   --color-stone: #8a8580; /* secondary: líneas, estados inactivos */
   --color-stone-text: #6e6963; /* secondary para texto chico (contraste AA sobre blanco y arena) */
   --color-bronze: #765c48; /* tertiary: badges, acentos curados, hover del CTA */
-  --color-sand: #f5f1ec; /* neutral: bandas y paneles */
-  --color-sand-deep: #ebe5de;
-  --color-canvas: #ffffff;
+  --color-sand: #efebe6; /* neutral: bandas y paneles */
+  --color-sand-deep: #e5dfd8;
+  --color-canvas: #faf8f5; /* fondo crema */
+  --color-card: #ffffff;
   --color-whatsapp: #2c5e43; /* acento funcional WhatsApp / concierge */
-  --color-hairline: rgb(17 17 17 / 0.08);
+  --color-whatsapp-bright: #34d399;
+  --color-hairline: rgb(28 25 23 / 0.1);
   --color-veil: rgb(17 17 17 / 0.45);
   --color-error: #a3271f;
   --color-success: #2c5e43;
 
   --radius-*: initial;
+  --radius-sm: 0.25rem;
+  --radius-md: 0.5rem;
+  --radius-lg: 0.75rem; /* botones */
+  --radius-xl: 1rem; /* imágenes dentro de tarjetas */
+  --radius-2xl: 1.25rem; /* tarjetas */
+  --radius-3xl: 1.75rem; /* diálogos */
   --radius-full: 9999px;
+
+  --shadow-*: initial;
+  --shadow-soft: 0 1px 2px rgb(28 25 23 / 0.04), 0 4px 16px rgb(28 25 23 / 0.04);
+  --shadow-float: 0 10px 30px rgb(28 25 23 / 0.18);
+  --shadow-drawer: -12px 0 40px rgb(28 25 23 / 0.12);
 
   --font-*: initial;
   --font-serif: var(--font-playfair), "Playfair Display", Georgia, serif;
-  --font-sans: var(--font-inter), "Inter", system-ui, sans-serif;
-  --font-label: var(--font-montserrat), "Montserrat", system-ui, sans-serif;
+  --font-sans: var(--font-geist), "Geist", system-ui, sans-serif;
+  --font-label: var(--font-geist), "Geist", system-ui, sans-serif;
 
   --text-display: 56px;
   --text-display--line-height: 64px;
@@ -125,6 +136,12 @@
   from {
     opacity: 0;
     transform: translateY(-6px);
+  }
+}
+
+@keyframes drawer-in {
+  from {
+    transform: translateX(100%);
   }
 }
 

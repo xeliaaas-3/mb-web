@@ -99,7 +99,7 @@ export default async function ProductPage({ params }: PageProps<"/prenda/[slug]"
 
             <div className="mt-8 space-y-2">
               {details.map((d) => (
-                <details key={d.title} open={d.open} className="group bg-sand">
+                <details key={d.title} open={d.open} className="group overflow-hidden rounded-xl bg-sand">
                   <summary className="flex cursor-pointer list-none items-center justify-between px-5 py-4 label-caps [&::-webkit-details-marker]:hidden">
                     {d.title}
                     <ChevronDown size={16} strokeWidth={1.25} className="transition-transform group-open:rotate-180" />
@@ -132,7 +132,7 @@ export default async function ProductPage({ params }: PageProps<"/prenda/[slug]"
           {related.map((p) => (
             <li key={p.slug}>
               <Link href={`/prenda/${p.slug}`} className="group block">
-                <div className="relative aspect-[4/5] overflow-hidden bg-sand">
+                <div className="relative aspect-[4/5] overflow-hidden rounded-2xl bg-sand shadow-soft">
                   <Image
                     src={p.images[0].src}
                     alt={p.images[0].alt}
@@ -140,7 +140,7 @@ export default async function ProductPage({ params }: PageProps<"/prenda/[slug]"
                     sizes="(min-width: 1024px) 25vw, 50vw"
                     className="object-cover"
                   />
-                  <span className="absolute right-2 bottom-2 flex size-8 items-center justify-center rounded-full bg-white">
+                  <span className="absolute right-2 bottom-2 flex size-8 items-center justify-center rounded-full bg-white shadow-soft">
                     <Plus size={16} strokeWidth={1.25} />
                   </span>
                 </div>

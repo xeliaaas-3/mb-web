@@ -4,7 +4,7 @@ import { categories } from "@/lib/products";
 
 export function Footer() {
   return (
-    <footer className="border-t border-hairline bg-sand pb-28 lg:pb-0">
+    <footer className="border-t border-hairline bg-sand pb-24 lg:pb-0">
       <div className="page-width grid gap-10 page-x py-section md:grid-cols-4">
         <div className="md:col-span-2">
           <p className="font-serif text-headline-sm lowercase">{site.name.toLowerCase()}</p>
