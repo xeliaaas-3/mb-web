@@ -1,4 +1,6 @@
 export const site = {
+  /** URL pública (sin barra final). Cambiar al dominio propio con NEXT_PUBLIC_SITE_URL. */
+  url: (process.env.NEXT_PUBLIC_SITE_URL ?? "https://mb-web-drab.vercel.app").replace(/\/$/, ""),
   name: "Alba Boutique",
   shortName: "Alba",
   tagline: "Boutique | PY",
@@ -72,4 +74,27 @@ export function shippingCost(id: ShippingId, subtotal: number) {
 export function whatsappLink(text?: string) {
   const base = `https://wa.me/${site.whatsapp}`;
   return text ? `${base}?text=${encodeURIComponent(text)}` : base;
+}
+
+/**
+ * Datos de cobro que ve la clienta después de enviar el pedido.
+ * TODO: reemplazar por los datos reales del negocio (estos son de ejemplo).
+ */
+export const paymentDetails = {
+  bank: [
+    { label: "Banco", value: "Banco Ejemplo S.A." },
+    { label: "Titular", value: "Alba Boutique S.A." },
+    { label: "RUC", value: "80000000-0" },
+    { label: "Cuenta corriente", value: "0000000000" },
+    { label: "Alias", value: "0971444874" },
+  ],
+  wallet: { label: "Número de billetera", value: "0971 444 874" },
+} as const;
+
+export type PaymentKind = "transfer" | "wallet" | "on-delivery";
+
+export function paymentKind(method: string): PaymentKind {
+  if (method === paymentMethods[0]) return "transfer";
+  if (method === paymentMethods[2]) return "wallet";
+  return "on-delivery";
 }

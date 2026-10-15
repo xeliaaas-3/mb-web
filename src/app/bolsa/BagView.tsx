@@ -5,7 +5,9 @@ import Link from "next/link";
 import { useState, useSyncExternalStore, type ReactNode } from "react";
 import { ChevronDown, Minus, Plus, RefreshCw, Send, ShieldCheck, Smile, Store, Trash2, Truck } from "lucide-react";
 import { button, eyebrow } from "@/components/ui";
+import { trackEvent } from "@/lib/analytics";
 import { cart, useCart } from "@/lib/cart";
+import { PaymentInstructions } from "./PaymentInstructions";
 import { imageFor } from "@/lib/products";
 import { formatGs } from "@/lib/format";
 import {
@@ -77,7 +79,15 @@ export function BagView() {
     }
     const id = newOrderId();
     window.open(whatsappLink(buildOrderMessage(id, form, items)), "_blank", "noopener,noreferrer");
+    trackEvent("order_sent", {
+      order: id,
+      items: count,
+      value: totals.total,
+      payment: form.payment,
+      shipping: form.shipping,
+    });
     setSentOrder(id);
+    window.scrollTo({ top: 0 });
   }
 
   if (!mounted) return <div className="min-h-[60vh]" aria-busy="true" />;
@@ -90,10 +100,12 @@ export function BagView() {
           ¡ya casi es tuyo!
         </h1>
         <p className="mt-4 text-body-lg text-stone-text">
-          Abrimos WhatsApp con tu pedido armado. Enviá el mensaje y una asesora te confirma stock, envío y datos de
-          pago.
+          Abrimos WhatsApp con tu pedido armado. Enviá el mensaje y una asesora te confirma stock y envío.
         </p>
-        <div className="mt-8 flex flex-col gap-3">
+        <div className="mt-8">
+          <PaymentInstructions method={form.payment} total={totals.total} orderId={sentOrder} />
+        </div>
+        <div className="mt-6 flex flex-col gap-3">
           <a
             href={whatsappLink(buildOrderMessage(sentOrder, form, items))}
             target="_blank"

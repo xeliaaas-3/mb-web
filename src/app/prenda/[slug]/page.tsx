@@ -3,10 +3,12 @@ import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { ChevronDown, Plus } from "lucide-react";
+import { JsonLd } from "@/components/JsonLd";
 import { eyebrow } from "@/components/ui";
 import { formatGs } from "@/lib/format";
 import { categories, getProduct, products } from "@/lib/products";
 import { site } from "@/lib/site";
+import { productJsonLd } from "@/lib/structuredData";
 import { Gallery } from "./Gallery";
 import { PurchasePanel } from "./PurchasePanel";
 
@@ -23,7 +25,8 @@ export async function generateMetadata({ params }: PageProps<"/prenda/[slug]">):
   return {
     title,
     description: `${title} · ${product.material} · ${formatGs(product.price)}. ${product.description[0]}`,
-    openGraph: { images: [product.images[0].src] },
+    alternates: { canonical: `/prenda/${product.slug}` },
+    openGraph: { type: "website", images: [{ url: product.images[0].src, alt: product.images[0].alt }] },
   };
 }
 
@@ -62,6 +65,7 @@ export default async function ProductPage({ params }: PageProps<"/prenda/[slug]"
 
   return (
     <div className="pb-section">
+      <JsonLd data={productJsonLd(product)} />
       <nav aria-label="Ruta" className="page-width page-x py-4 label-caps-sm text-stone-text">
         <ol className="flex flex-wrap gap-2">
           <li>

@@ -4,6 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
 import { ShoppingBag } from "lucide-react";
+import { trackEvent } from "@/lib/analytics";
 import { bagDrawer } from "@/lib/bagDrawer";
 import { cart } from "@/lib/cart";
 import { formatGs } from "@/lib/format";
@@ -18,6 +19,7 @@ export function ProductCard({ product, priority = false }: { product: Product; p
 
   function add() {
     cart.add({ slug: product.slug, size, color: product.colors[0].name });
+    trackEvent("add_to_cart", { product: product.slug, size, value: product.price });
     bagDrawer.open();
   }
 

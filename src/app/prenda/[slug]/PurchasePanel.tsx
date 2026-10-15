@@ -11,6 +11,7 @@ import { formatGs } from "@/lib/format";
 import { capitalize } from "@/lib/order";
 import { totalStock, type Product } from "@/lib/products";
 import { site, whatsappLink } from "@/lib/site";
+import { trackEvent } from "@/lib/analytics";
 import { bagDrawer } from "@/lib/bagDrawer";
 
 export function PurchasePanel({ product }: { product: Product }) {
@@ -30,6 +31,7 @@ export function PurchasePanel({ product }: { product: Product }) {
   function addToBag() {
     if (!requireSize()) return;
     cart.add({ slug: product.slug, size: size!, color });
+    trackEvent("add_to_cart", { product: product.slug, size: size!, value: product.price });
     bagDrawer.open();
   }
 

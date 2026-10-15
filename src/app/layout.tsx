@@ -3,6 +3,7 @@ import { Geist, Playfair_Display } from "next/font/google";
 import { FloatingWhatsApp } from "@/components/FloatingWhatsApp";
 import { Footer } from "@/components/Footer";
 import { Header } from "@/components/Header";
+import { Analytics } from "@/components/Analytics";
 import { BagDrawer } from "@/components/BagDrawer";
 import { site } from "@/lib/site";
 import "./globals.css";
@@ -16,9 +17,11 @@ const playfair = Playfair_Display({
 const geist = Geist({ subsets: ["latin"], variable: "--font-geist" });
 
 export const metadata: Metadata = {
+  metadataBase: new URL(site.url),
   title: { default: `${site.name} | Moda femenina de autor en Paraguay`, template: `%s | ${site.name}` },
   description: site.description,
   openGraph: { siteName: site.name, locale: "es_PY", type: "website" },
+  twitter: { card: "summary_large_image" },
 };
 
 export const viewport: Viewport = {
@@ -43,6 +46,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
         <Footer />
         <FloatingWhatsApp />
         <BagDrawer />
+        <Analytics />
       </body>
     </html>
   );

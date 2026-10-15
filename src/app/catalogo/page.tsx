@@ -4,6 +4,7 @@ import { CatalogView } from "./CatalogView";
 
 export const metadata: Metadata = {
   title: "Catálogo",
+  alternates: { canonical: "/catalogo" },
   description: "Vestidos, conjuntos, blusas y accesorios de autor en lino, seda y algodón. Envíos a todo Paraguay.",
 };
 

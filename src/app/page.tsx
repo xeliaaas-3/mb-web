@@ -1,6 +1,8 @@
+import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import { ArrowUpRight, MapPin, Ruler, Star } from "lucide-react";
+import { JsonLd } from "@/components/JsonLd";
 import { ProductCard } from "@/components/ProductCard";
 import { SizeAssistant } from "@/components/SizeAssistant";
 import { button, card, eyebrow, sectionTitle } from "@/components/ui";
@@ -9,6 +11,9 @@ import { formatGs } from "@/lib/format";
 import { img } from "@/lib/images";
 import { collections, getProduct, products } from "@/lib/products";
 import { site, whatsappLink } from "@/lib/site";
+import { storeJsonLd } from "@/lib/structuredData";
+
+export const metadata: Metadata = { alternates: { canonical: "/" } };
 
 const steps = [
   {
@@ -56,6 +61,7 @@ export default function Home() {
 
   return (
     <>
+      <JsonLd data={storeJsonLd()} />
       {/* Hero */}
       <section className="relative">
         <div className="relative h-[78svh] min-h-[520px] w-full md:h-[86svh]">
