@@ -2,29 +2,48 @@
 
 Las prendas de la tienda se cargan desde una Google Sheet. Cambiás la planilla y la web se actualiza sola en hasta 5 minutos, sin tocar código.
 
+## Cómo está organizada
+
+- Pestaña **Instrucciones**: guía rápida para quien carga las prendas (la web no la lee).
+- Una pestaña por categoría: **Vestidos, Blusas & tops, Pantalones, Faldas, Conjuntos, Monos, Blazers & abrigos, Carteras, Bijouterie, Calzado, Sombreros, cintos & lentes**.
+- Todas tienen las mismas columnas, listas desplegables (categoría, etiqueta, activo), fecha validada y una nota en cada título.
+
 ## Puesta en marcha (una sola vez)
 
-1. Abrí la planilla **Alba Boutique — Catálogo** en Google Drive (o importá `docs/catalogo-plantilla.csv` en una planilla nueva).
-2. **Compartir → Acceso general → "Cualquier persona con el enlace" → Lector.** Sin esto la web no puede leerla.
-3. Armá la URL de lectura con el ID de la planilla (lo que va entre `/d/` y `/edit` en la dirección):
+1. **Archivo → Compartir → Publicar en la web**, elegí **Todo el documento** y **Valores separados por comas (.csv)**, y publicá. (También sirve compartir con "Cualquier persona con el enlace: Lector".)
+2. Cada pestaña tiene su número `gid` (aparece en la dirección al abrir la pestaña: `...#gid=202`). En la planilla de Alba son:
 
-   ```
-   https://docs.google.com/spreadsheets/d/ID_DE_LA_PLANILLA/export?format=csv&gid=0
-   ```
+   | Pestaña | gid |
+   | --- | --- |
+   | Vestidos | 101 |
+   | Blusas & tops | 202 |
+   | Pantalones | 203 |
+   | Faldas | 204 |
+   | Conjuntos | 205 |
+   | Monos | 206 |
+   | Blazers & abrigos | 207 |
+   | Carteras | 208 |
+   | Bijouterie | 209 |
+   | Calzado | 210 |
+   | Sombreros, cintos & lentes | 211 |
 
-   `gid=0` es la primera pestaña. Si los productos están en otra pestaña, usá el número que aparece después de `gid=` en la dirección.
+3. Armá una URL por pestaña:
+   - Publicada en la web: `https://docs.google.com/spreadsheets/d/e/ID_PUBLICADO/pub?gid=GID&single=true&output=csv`
+   - Compartida con enlace: `https://docs.google.com/spreadsheets/d/ID_DE_LA_PLANILLA/export?format=csv&gid=GID`
 4. En el hosting (Vercel o Cloudflare), cargá las variables de entorno y volvé a publicar:
-   - `CATALOG_SHEET_CSV_URL` = la URL del paso 3.
-   - `CATALOG_REFRESH_SECRET` = una clave cualquiera, para el botón de actualizar ya.
+   - `CATALOG_SHEET_CSV_URL` = las 11 URLs separadas por espacios o saltos de línea.
+   - `CATALOG_REFRESH_SECRET` = una clave cualquiera, para actualizar al instante.
+
+Si más adelante agregás una pestaña nueva, sumá su URL a `CATALOG_SHEET_CSV_URL`.
 
 ## Cómo se completa cada columna
 
-Una fila por prenda. La primera fila son los títulos (no cambiarlos). Las filas de arriba se muestran como las más nuevas.
+Una fila por prenda. La primera fila son los títulos (no cambiarlos). Si una fila no tiene categoría, toma la de su pestaña.
 
 | Columna | Obligatoria | Ejemplo | Notas |
 | --- | --- | --- | --- |
 | `nombre` | sí | Vestido camisero terracota | |
-| `categoria` | sí | Vestidos | Vestidos, Blusas & tops, Pantalones, Faldas, Conjuntos, Monos, Blazers & abrigos, Carteras, Bijouterie, Calzado, Sombreros/cintos/lentes. También entiende "vestido", "blusa", "zapato", "bolso"… |
+| `categoria` | | Vestidos | Vestidos, Blusas & tops, Pantalones, Faldas, Conjuntos, Monos, Blazers & abrigos, Carteras, Bijouterie, Calzado, Sombreros/cintos/lentes. También entiende "vestido", "blusa", "zapato", "bolso"… |
 | `precio` | sí | 289000 | Se puede escribir `289.000` o `Gs. 289.000`. |
 | `precio_anterior` | | 340000 | Si es mayor que el precio, la prenda entra al **Sale** y muestra el descuento. |
 | `etiqueta` | | Nuevo | Nuevo, Más vendido, Últimas unidades, Edición especial u Oferta. "Nuevo" la suma a **Nuevos ingresos**. |
@@ -34,6 +53,7 @@ Una fila por prenda. La primera fila son los títulos (no cambiarlos). Las filas
 | `talles` | | S:2, M:3, L:0 | Talle y stock. Con stock 0 aparece tachado como agotado. Para accesorios: `Único:5`. |
 | `fotos` | sí | (links) | Uno o más links, uno por línea. Sirven links de Google Drive (la foto tiene que estar compartida con "cualquier persona con el enlace"), Cloudinary, ImgBB o cualquier link directo a una imagen. La primera es la principal. |
 | `descripcion` | | | Cada línea es un párrafo. |
+| `ingreso` | | 15/10/2026 | Fecha de ingreso. Ordena **Nuevos ingresos** (sin fecha, la prenda va al final). |
 | `vendidos` | | 64 | Ordena "Más vendidos". |
 | `slug` | | vestido-camisero-terracota | La dirección de la prenda (`/prenda/...`). Si se deja vacío se arma con el nombre. **No cambiarlo** en prendas ya publicadas, porque se rompen los links compartidos. |
 | `activo` | | sí | Poné `no` para ocultar la prenda sin borrarla. |

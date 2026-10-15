@@ -14,14 +14,16 @@ import {
 /**
  * Catálogo editable desde una Google Sheet.
  *
- * La planilla se lee como CSV desde `CATALOG_SHEET_CSV_URL` y se vuelve a leer cada
+ * La planilla tiene una pestaña por categoría. Cada pestaña se lee como CSV: `CATALOG_SHEET_CSV_URL`
+ * lleva una URL por pestaña, separadas por espacios o saltos de línea. Se vuelve a leer cada
  * `CATALOG_REFRESH_SECONDS` (5 minutos). Sin esa variable se usa el catálogo de ejemplo
  * de `products.ts`. Si la planilla falla, se sigue mostrando la última versión válida:
  * nunca se reemplaza el catálogo real por el de ejemplo.
  *
  * Columnas (la primera fila son los títulos, sin importar mayúsculas ni acentos):
  * nombre*, categoria*, precio*, precio_anterior, etiqueta, colecciones, material,
- * colores, talles, fotos*, descripcion, vendidos, slug, activo.
+ * colores, talles, fotos*, descripcion, ingreso, vendidos, slug, activo.
+ * Si una fila no tiene categoría, toma la de su pestaña (la más usada en esa pestaña).
  * Ver docs/catalogo.md para el detalle de cada una.
  */
 
@@ -34,15 +36,29 @@ export type CatalogSource = { products: Product[]; source: "planilla" | "ejemplo
 let lastGood: CatalogSource | null = null;
 
 export const getCatalog = cache(async (): Promise<CatalogSource> => {
-  const url = process.env.CATALOG_SHEET_CSV_URL;
-  if (!url) return { products: sampleProducts, source: "ejemplo", warnings: [] };
+  const urls = (process.env.CATALOG_SHEET_CSV_URL ?? "").split(/\s+/).filter(Boolean);
+  if (urls.length === 0) return { products: sampleProducts, source: "ejemplo", warnings: [] };
 
   try {
-    const res = await fetch(url, { next: { revalidate: CATALOG_REFRESH_SECONDS, tags: [CATALOG_TAG] } });
-    if (!res.ok) throw new Error(`La planilla respondió ${res.status}`);
-    const text = await res.text();
-    if (text.trimStart().startsWith("<")) throw new Error("La planilla no es pública o la URL no devuelve CSV");
-    const { products, warnings } = parseCatalogCsv(text);
+    const texts = await Promise.all(
+      urls.map(async (url, i) => {
+        const res = await fetch(url, { next: { revalidate: CATALOG_REFRESH_SECONDS, tags: [CATALOG_TAG] } });
+        if (!res.ok) throw new Error(`La pestaña ${i + 1} respondió ${res.status}`);
+        const text = await res.text();
+        if (text.trimStart().startsWith("<")) {
+          throw new Error(`La pestaña ${i + 1} no es pública o su URL no devuelve CSV`);
+        }
+        return text;
+      }),
+    );
+    const seen = new Set<string>();
+    const products: Product[] = [];
+    const warnings: string[] = [];
+    texts.forEach((text, i) => {
+      const result = parseCatalogCsv(text, { seen, label: urls.length > 1 ? `Pestaña ${i + 1}, fila` : "Fila" });
+      products.push(...result.products);
+      warnings.push(...result.warnings);
+    });
     if (warnings.length) console.warn(`[catálogo] ${warnings.length} avisos:\n- ${warnings.join("\n- ")}`);
     if (products.length === 0) throw new Error("La planilla no tiene productos válidos");
     lastGood = { products, source: "planilla", warnings };
@@ -125,6 +141,7 @@ const columnAliases: Record<string, string[]> = {
   sizes: ["talles", "talle", "stock"],
   images: ["fotos", "foto", "imagenes"],
   description: ["descripcion"],
+  addedAt: ["ingreso", "fecha", "fecha ingreso", "fecha de ingreso"],
   sold: ["vendidos"],
   active: ["activo", "visible", "publicar"],
 };
@@ -219,7 +236,24 @@ export function toImageUrl(raw: string) {
   return driveId ? `https://lh3.googleusercontent.com/d/${driveId}` : url;
 }
 
-export function parseCatalogCsv(text: string): { products: Product[]; warnings: string[] } {
+/** Fecha de ingreso (dd/mm/aaaa o aaaa-mm-dd) a número de días, para ordenar "novedades". */
+function parseDate(value: string) {
+  const v = value.trim();
+  let y: number, m: number, d: number;
+  const iso = v.match(/^(\d{4})-(\d{1,2})-(\d{1,2})/);
+  const local = v.match(/^(\d{1,2})[/.-](\d{1,2})[/.-](\d{2,4})/);
+  if (iso) [y, m, d] = [Number(iso[1]), Number(iso[2]), Number(iso[3])];
+  else if (local) [d, m, y] = [Number(local[1]), Number(local[2]), Number(local[3])];
+  else return null;
+  if (y < 100) y += 2000;
+  const time = Date.UTC(y, m - 1, d);
+  return Number.isNaN(time) || m > 12 || d > 31 ? null : time / 86_400_000;
+}
+
+export function parseCatalogCsv(
+  text: string,
+  { seen = new Set<string>(), label = "Fila" }: { seen?: Set<string>; label?: string } = {},
+): { products: Product[]; warnings: string[] } {
   const [header, ...rows] = parseCsv(text);
   const warnings: string[] = [];
   if (!header) return { products: [], warnings: ["La planilla está vacía"] };
@@ -234,8 +268,15 @@ export function parseCatalogCsv(text: string): { products: Product[]; warnings: 
     if (col[required] === undefined) warnings.push(`Falta la columna "${columnAliases[required][0]}"`);
   }
 
-  const seen = new Set<string>();
   const products: Product[] = [];
+
+  // Categoría de la pestaña: la más usada entre sus filas (para filas que la dejan vacía).
+  const counts = new Map<CategoryId, number>();
+  for (const row of rows) {
+    const c = col.category === undefined ? null : parseCategory(row[col.category] ?? "");
+    if (c) counts.set(c, (counts.get(c) ?? 0) + 1);
+  }
+  const tabCategory = [...counts.entries()].sort((a, b) => b[1] - a[1])[0]?.[0] ?? null;
 
   rows.forEach((row, i) => {
     const line = i + 2;
@@ -246,7 +287,7 @@ export function parseCatalogCsv(text: string): { products: Product[]; warnings: 
 
     const name = get("name");
     if (!name) return;
-    const category = parseCategory(get("category"));
+    const category = get("category") ? parseCategory(get("category")) : tabCategory;
     const price = parseMoney(get("price"));
     const images = get("images")
       .split(/[\s|]+/)
@@ -259,12 +300,15 @@ export function parseCatalogCsv(text: string): { products: Product[]; warnings: 
       images.length === 0 && "sin fotos (pegá al menos un link)",
     ].filter(Boolean);
     if (problems.length) {
-      warnings.push(`Fila ${line} (${name}): ${problems.join(", ")}`);
+      warnings.push(`${label} ${line} (${name}): ${problems.join(", ")}`);
       return;
     }
 
     let slug = slugify(get("slug") || name);
-    if (seen.has(slug)) slug = `${slug}-${line}`;
+    if (seen.has(slug)) {
+      warnings.push(`${label} ${line} (${name}): el slug "${slug}" ya existe; se publicó como "${slug}-${line}"`);
+      slug = `${slug}-${line}`;
+    }
     seen.add(slug);
 
     const compareAt = parseMoney(get("compareAt"));
@@ -292,8 +336,8 @@ export function parseCatalogCsv(text: string): { products: Product[]; warnings: 
       sizes: sizes.length ? sizes : [{ label: "Único", stock: 1 }],
       images: images.map((src, n) => ({ src, alt: n === 0 ? name : `${name}, foto ${n + 1}` })),
       description: description.length ? description : [name],
-      // Las primeras filas de la planilla son las más nuevas.
-      addedAt: rows.length - i,
+      // Con fecha de ingreso se ordena por fecha; sin fecha, las primeras filas son las más nuevas.
+      addedAt: parseDate(get("addedAt")) ?? (rows.length - i) / 1000,
       sold: Number.isFinite(sold) ? sold : 0,
     });
   });
