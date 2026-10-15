@@ -9,7 +9,7 @@ import { WhatsAppIcon } from "@/components/WhatsAppIcon";
 import { cart } from "@/lib/cart";
 import { formatGs } from "@/lib/format";
 import { capitalize } from "@/lib/order";
-import { totalStock, type Product } from "@/lib/products";
+import { categoryOf, totalStock, type Product } from "@/lib/products";
 import { site, whatsappLink } from "@/lib/site";
 import { trackEvent } from "@/lib/analytics";
 import { bagDrawer } from "@/lib/bagDrawer";
@@ -20,7 +20,7 @@ export function PurchasePanel({ product }: { product: Product }) {
   const [size, setSize] = useState<string | null>(available.length === 1 ? available[0].label : null);
   const [sizeError, setSizeError] = useState(false);
   const stock = totalStock(product);
-  const isApparel = product.category !== "accesorios";
+  const isApparel = categoryOf(product).group === "ropa";
 
   function requireSize() {
     if (size) return true;

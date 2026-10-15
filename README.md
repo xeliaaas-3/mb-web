@@ -16,18 +16,21 @@ npm run build
 | `/catalogo` (filtros en la URL: `categoria`, `coleccion`, `talle`, `color`, `max`, `orden`, `buscar`) | `src/app/catalogo/CatalogView.tsx` |
 | `/prenda/[slug]` (generada estática por prenda) | `src/app/prenda/[slug]/` |
 | `/bolsa` bolsa + checkout por WhatsApp | `src/app/bolsa/BagView.tsx` |
+| `/lookbook`, `/gift-card`, `/favoritos` | looks completos, gift cards por WhatsApp y prendas guardadas |
+| `/nosotras`, `/contacto`, `/guia-de-talles`, `/envios-y-cambios`, `/preguntas-frecuentes` | páginas institucionales y de ayuda |
 
 - **Tokens de diseño**: `src/app/globals.css` (`@theme`). Fondo crema, tarjetas blancas redondeadas, Playfair Display + Geist y utilidades `label-caps`, `page-x`, `link-editorial`.
 - **Bolsa lateral** (`src/components/BagDrawer.tsx`) y **asistente de talles** (`src/components/SizeAssistant.tsx`, medidas en `src/lib/sizes.ts`).
-- **Prendas, talles, stock y precios**: `src/lib/products.ts`.
+- **Prendas, categorías, colecciones, talles, stock y precios**: `src/lib/products.ts` (47 productos de ejemplo).
+- **Textos** (beneficios, looks, reseñas, preguntas frecuentes, políticas, montos de gift card): `src/lib/content.ts`.
 - **Datos del negocio** (WhatsApp, dirección, horarios, envíos, medios de pago, meta de envío gratis): `src/lib/site.ts`.
 - **Bolsa**: `src/lib/cart.ts`, guardada en `localStorage` del navegador.
 - **Mensaje de WhatsApp**: `src/lib/order.ts` (`buildOrderMessage`). El checkout valida datos, arma el pedido en texto y abre `wa.me/<número>?text=…`.
 
 ## Pendiente antes de publicar
 
-- Reemplazar las imágenes de `src/lib/images.ts` (generadas por IA en Stitch, alojadas en Google) por fotos reales en `public/` y quitar `images.remotePatterns` de `next.config.ts`.
-- Revisar precios, stock, textos de prendas, reseñas, cuenta de Instagram y dirección.
+- Reemplazar las fotos de ejemplo de `src/lib/images.ts` (Unsplash, licencia libre) por fotos reales de las prendas en `public/` y ajustar `images.remotePatterns` de `next.config.ts`.
+- Revisar precios, stock, textos de prendas, reseñas, looks, preguntas frecuentes y políticas (`src/lib/products.ts` y `src/lib/content.ts`), cuenta de Instagram y dirección.
 - El stock está en el código: no se descuenta solo. Las asesoras confirman disponibilidad por WhatsApp.
 
 ## Compartir, Google y analítica

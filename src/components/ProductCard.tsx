@@ -9,6 +9,7 @@ import { bagDrawer } from "@/lib/bagDrawer";
 import { cart } from "@/lib/cart";
 import { formatGs } from "@/lib/format";
 import { badgeLabel, inStock, type Product } from "@/lib/products";
+import { FavoriteButton } from "./FavoriteButton";
 import { card } from "./ui";
 
 export function ProductCard({ product, priority = false }: { product: Product; priority?: boolean }) {
@@ -47,13 +48,14 @@ export function ProductCard({ product, priority = false }: { product: Product; p
         </Link>
         {product.badge && (
           <span
-            className={`absolute top-2 left-2 rounded-sm px-2 py-0.5 label-caps-sm ${
+            className={`absolute bottom-2 left-2 rounded-sm px-2 py-0.5 label-caps-sm ${
               product.badge === "oferta" ? "bg-bronze text-white" : "bg-ink text-white"
             }`}
           >
             {badgeLabel[product.badge]}
           </span>
         )}
+        <FavoriteButton slug={product.slug} name={product.name} className="absolute top-2 right-2" />
       </div>
 
       <h3 className="mt-3 truncate font-serif text-[15px] leading-snug italic md:text-title">
@@ -69,9 +71,14 @@ export function ProductCard({ product, priority = false }: { product: Product; p
             {formatGs(product.compareAt)}
           </s>
         )}
+        {product.compareAt && (
+          <span className="text-body-sm font-semibold text-bronze">
+            -{Math.round((1 - product.price / product.compareAt) * 100)}%
+          </span>
+        )}
       </p>
 
-      {inStock(product) && (
+      {inStock(product) && product.sizes.length > 1 && (
         <div className="mt-2.5 flex flex-wrap items-center gap-1" role="group" aria-label="Talle">
           <span className="mr-1 text-[10px] text-stone-text">Talles:</span>
           {product.sizes.map((s) => (

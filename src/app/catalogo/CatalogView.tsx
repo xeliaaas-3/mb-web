@@ -7,7 +7,7 @@ import { ProductCard } from "@/components/ProductCard";
 import { button, eyebrow } from "@/components/ui";
 import { WhatsAppIcon } from "@/components/WhatsAppIcon";
 import { formatGs } from "@/lib/format";
-import { categories, collections, products, type Product } from "@/lib/products";
+import { categories, categoryOf, collections, groups, products, type Product } from "@/lib/products";
 import { whatsappLink } from "@/lib/site";
 
 const PAGE_SIZE = 8;
@@ -17,6 +17,7 @@ const minCatalogPrice = Math.floor(Math.min(...products.map((p) => p.price)) / 5
 
 const sorts = {
   novedades: { label: "Novedades", fn: (a: Product, b: Product) => b.addedAt - a.addedAt },
+  "mas-vendidos": { label: "Más vendidos", fn: (a: Product, b: Product) => b.sold - a.sold },
   "precio-asc": { label: "Menor precio", fn: (a: Product, b: Product) => a.price - b.price },
   "precio-desc": { label: "Mayor precio", fn: (a: Product, b: Product) => b.price - a.price },
 } as const;
@@ -35,6 +36,9 @@ export function CatalogView() {
 
   const categoria = params.get("categoria") ?? "";
   const coleccion = params.get("coleccion") ?? "";
+  const grupo = params.get("grupo") ?? "";
+  const collection = collections.find((c) => c.id === coleccion);
+  const group = groups.find((g) => g.id === grupo);
   const orden = (params.get("orden") as SortId) in sorts ? (params.get("orden") as SortId) : "novedades";
   const talles = params.getAll("talle");
   const colores = params.getAll("color");
@@ -63,18 +67,26 @@ export function CatalogView() {
   const q = normalize(query.trim());
   const results = products
     .filter((p) => !categoria || p.category === categoria)
-    .filter((p) => !coleccion || p.collections.includes(coleccion as never))
+    .filter((p) => !collection || collection.match(p))
+    .filter((p) => !group || categoryOf(p).group === group.id)
     .filter((p) => !talles.length || p.sizes.some((s) => s.stock > 0 && talles.includes(s.label)))
     .filter((p) => !colores.length || p.colors.some((c) => colores.includes(c.name)))
     .filter((p) => p.price <= max)
-    .filter((p) => !q || normalize(`${p.name} ${p.material} ${p.colors.map((c) => c.name).join(" ")}`).includes(q))
+    .filter(
+      (p) =>
+        !q ||
+        normalize(`${p.name} ${p.material} ${categoryOf(p).label} ${p.colors.map((c) => c.name).join(" ")}`).includes(
+          q,
+        ),
+    )
     .sort(sorts[orden].fn);
 
   const activeFilters = talles.length + colores.length + (max < maxCatalogPrice ? 1 : 0);
-  const collectionLabel = collections.find((c) => c.id === coleccion)?.label;
-  const heading = categories.find((c) => c.id === categoria)?.label ?? collectionLabel ?? "Toda la colección";
+  const collectionLabel = collection?.label;
+  const heading =
+    categories.find((c) => c.id === categoria)?.label ?? collectionLabel ?? group?.label ?? "Toda la colección";
 
-  const tabs = [{ id: "", label: "Todos" }, ...categories];
+  const tabs = [{ id: "", label: "Todo" }, ...categories.filter((c) => !group || c.group === group.id)];
 
   return (
     <div className="page-width page-x pt-6 pb-section md:pt-10">
@@ -108,7 +120,7 @@ export function CatalogView() {
 
       <div className="mt-8 flex items-end justify-between gap-4">
         <div>
-          <p className={eyebrow}>Catálogo curation</p>
+          <p className={eyebrow}>{collection?.description ?? "Catálogo"}</p>
           <h1 className="mt-2 font-serif text-headline-lg-mobile lowercase md:text-headline-lg">{heading}</h1>
         </div>
         <p className="text-body-md text-stone-text">
@@ -116,14 +128,27 @@ export function CatalogView() {
         </p>
       </div>
 
-      {collectionLabel && (
-        <button
-          type="button"
-          onClick={() => update((p) => p.delete("coleccion"))}
-          className="mt-4 inline-flex items-center gap-2 rounded-full border border-ink px-3 py-2 label-caps-sm"
-        >
-          Colección: {collectionLabel} <X size={12} strokeWidth={1.5} />
-        </button>
+      {(collectionLabel || group) && (
+        <div className="mt-4 flex flex-wrap gap-2">
+          {collectionLabel && (
+            <button
+              type="button"
+              onClick={() => update((p) => p.delete("coleccion"))}
+              className="inline-flex items-center gap-2 rounded-full border border-ink px-3 py-2 label-caps-sm"
+            >
+              Colección: {collectionLabel} <X size={12} strokeWidth={1.5} />
+            </button>
+          )}
+          {group && (
+            <button
+              type="button"
+              onClick={() => update((p) => p.delete("grupo"))}
+              className="inline-flex items-center gap-2 rounded-full border border-ink px-3 py-2 label-caps-sm"
+            >
+              {group.label} <X size={12} strokeWidth={1.5} />
+            </button>
+          )}
+        </div>
       )}
 
       <nav aria-label="Categorías" className="-mx-5 mt-6 no-scrollbar flex gap-2 overflow-x-auto px-5 md:mx-0 md:px-0">

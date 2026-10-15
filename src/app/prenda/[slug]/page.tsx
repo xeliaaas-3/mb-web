@@ -1,12 +1,12 @@
 import type { Metadata } from "next";
-import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { ChevronDown, Plus } from "lucide-react";
+import { ChevronDown } from "lucide-react";
 import { JsonLd } from "@/components/JsonLd";
+import { ProductCard } from "@/components/ProductCard";
 import { eyebrow } from "@/components/ui";
 import { formatGs } from "@/lib/format";
-import { categories, getProduct, products } from "@/lib/products";
+import { categories, categoryOf, getProduct, inStock, products } from "@/lib/products";
 import { site } from "@/lib/site";
 import { productJsonLd } from "@/lib/structuredData";
 import { Gallery } from "./Gallery";
@@ -35,11 +35,17 @@ export default async function ProductPage({ params }: PageProps<"/prenda/[slug]"
   if (!product) notFound();
 
   const category = categories.find((c) => c.id === product.category)!;
-  const complements = products.filter((p) => p.category === "accesorios" && p.slug !== product.slug).slice(0, 2);
-  const related =
-    complements.length > 0
-      ? complements
-      : products.filter((p) => p.category !== "accesorios" && p.slug !== product.slug).slice(0, 2);
+  const isApparel = category.group === "ropa";
+  // Completá tu look: accesorios para la ropa y ropa para los accesorios, priorizando la misma colección.
+  const sharesCollection = (p: (typeof products)[number]) => p.collections.some((c) => product.collections.includes(c));
+  const complements = products
+    .filter((p) => categoryOf(p).group !== category.group && inStock(p))
+    .sort((a, b) => Number(sharesCollection(b)) - Number(sharesCollection(a)) || b.sold - a.sold)
+    .slice(0, 4);
+  const similar = products
+    .filter((p) => p.category === product.category && p.slug !== product.slug)
+    .sort((a, b) => b.sold - a.sold)
+    .slice(0, 4);
 
   const details = [
     { title: "Descripción & calce", content: product.description, open: true },
@@ -124,37 +130,37 @@ export default async function ProductPage({ params }: PageProps<"/prenda/[slug]"
         <div className="flex items-end justify-between">
           <div>
             <p className={eyebrow}>Curaduría</p>
-            <h2 id="completa-tu-look" className="mt-2 font-serif text-headline-md lowercase">
+            <h2 id="completa-tu-look" className="mt-2 font-serif text-headline-md lowercase italic">
               completá tu look
             </h2>
           </div>
-          <Link href="/catalogo?categoria=accesorios" className="shrink-0 link-editorial label-caps whitespace-nowrap">
+          <Link
+            href={`/catalogo?grupo=${isApparel ? "accesorios" : "ropa"}`}
+            className="shrink-0 link-editorial label-caps whitespace-nowrap"
+          >
             Ver todo
           </Link>
         </div>
-        <ul className="mt-6 grid grid-cols-2 gap-gutter-mobile md:gap-gutter lg:grid-cols-4">
-          {related.map((p) => (
-            <li key={p.slug}>
-              <Link href={`/prenda/${p.slug}`} className="group block">
-                <div className="relative aspect-[4/5] overflow-hidden rounded-2xl bg-sand shadow-soft">
-                  <Image
-                    src={p.images[0].src}
-                    alt={p.images[0].alt}
-                    fill
-                    sizes="(min-width: 1024px) 25vw, 50vw"
-                    className="object-cover"
-                  />
-                  <span className="absolute right-2 bottom-2 flex size-8 items-center justify-center rounded-full bg-white shadow-soft">
-                    <Plus size={16} strokeWidth={1.25} />
-                  </span>
-                </div>
-                <p className="mt-3 font-serif text-title lowercase">{p.name}</p>
-                <p className="text-price text-stone-text">{formatGs(p.price)}</p>
-              </Link>
-            </li>
+        <div className="mt-6 grid grid-cols-2 gap-x-gutter-mobile gap-y-8 md:gap-x-gutter lg:grid-cols-4">
+          {complements.map((p) => (
+            <ProductCard key={p.slug} product={p} />
           ))}
-        </ul>
+        </div>
       </section>
+
+      {similar.length > 0 && (
+        <section className="page-width mt-section page-x" aria-labelledby="tambien-te-puede-gustar">
+          <p className={eyebrow}>{category.label}</p>
+          <h2 id="tambien-te-puede-gustar" className="mt-2 font-serif text-headline-md lowercase italic">
+            también te puede gustar
+          </h2>
+          <div className="mt-6 grid grid-cols-2 gap-x-gutter-mobile gap-y-8 md:gap-x-gutter lg:grid-cols-4">
+            {similar.map((p) => (
+              <ProductCard key={p.slug} product={p} />
+            ))}
+          </div>
+        </section>
+      )}
     </div>
   );
 }

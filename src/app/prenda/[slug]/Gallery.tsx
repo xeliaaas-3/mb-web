@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 import { useRef, useState } from "react";
+import { FavoriteButton } from "@/components/FavoriteButton";
 import { badgeLabel, type Product } from "@/lib/products";
 
 /** Mobile: carrusel con scroll-snap. Desktop: imágenes apiladas (columna de 7). */
@@ -50,6 +51,8 @@ export function Gallery({ product }: { product: Product }) {
         )}
         <span className="rounded-sm bg-white/90 px-2 py-1 label-caps-sm">{product.material}</span>
       </div>
+
+      <FavoriteButton slug={product.slug} name={product.name} className="absolute top-3 right-3 size-11" />
 
       {images.length > 1 && (
         <div className="absolute bottom-3 left-3 flex gap-1.5 rounded-full bg-white/90 px-2.5 py-1.5 lg:hidden">

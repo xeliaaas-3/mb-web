@@ -1,58 +1,79 @@
-// Imágenes provisorias generadas en Google Stitch. Reemplazar por fotos reales de las prendas.
-// Se sirven desde lh3.googleusercontent.com (ver images.remotePatterns en next.config.ts).
+// Fotos de ejemplo de Unsplash (licencia libre, uso comercial permitido).
+// Reemplazar por fotos propias de las prendas antes de publicar la tienda real.
 
-export const img = {
-  heroAtelier:
-    "https://lh3.googleusercontent.com/aida-public/AB6AXuDGQNmSjljBbwCGC7_gznIoyrtpaWbZpHJ1unU2lUSefxhw0mFUk-h2Qh3DkuSnYXH4mimW0FcQdkPcCbB6UGfQ9h6iB8fq-uPIXfI3gJYRoQH25Rxw-dpWTGbc3hXYQoSlLnlXv2sq2te_dmAGsr-2594wQAZFn4_RCSeu3mAzoo9Hqx1sWKpZhogS20NxkL826m9CcpDREeEpwWH2cBc5lrrBdi3U3nUv7sau-xwHJvemiaguGvJQ",
-  colLino:
-    "https://lh3.googleusercontent.com/aida-public/AB6AXuAs-usSYcF7qjlh4Qi5XklrdClJm6KRsdBP-L-uvfKIqiBGPv6S_zhNPI7hcNv36lX17Cgp6E-R-HNHZuCIO4QO8pYoxz01cR65NqpJQImNVH0FlA_d2HztITcVI34ZeqmE-S4hN-vGgTwMeUd9SaR3Ai2FvRQKZ0Us1k_lINzM3diTKKaA2CPWWHPL1OqBA_n8WfltCBLMFwOyTwiw25rGwfkQEk5buYXX9PVx0VHYzvfxXZPkAu0o",
-  colGala:
-    "https://lh3.googleusercontent.com/aida-public/AB6AXuBJNLWsH8LmV9FwqC8POZm4GM8lYMmjpFYH4W9CVoZXXV1aM5Yr2L_MBiXKLohSpAULIk6fOXdcG343e4ysxfLQii3rXMI-tMmUeh-eYD3S937xtXGn4gaoVZYoHjnFfgWKxSYFGaJ-vpLymTkPmxl5pPRNwURTjozhMsJzNknz953_U5Kws9SEhlCr0hnNS8EgVTTWXsXqGejCfph_fPXnEhtN_xPdO0JbAADdWgzvB8JeVXD0WeX4",
-  colConjuntos:
-    "https://lh3.googleusercontent.com/aida-public/AB6AXuCiyNhHWZwNtHPkUdj_bnfGRTj-7yyF8MUSdnA7ZsBw97-ljcwyt2eX7C8TV9Qg4DdujlKIR5R0_EhImzNW2peqMIcTYNb8hDY8mw1pvHeytmPOPmyplYshtdOH_NGN7OPB7glSPfYpyI-drft9pEZx0Xy6DhzR1GDky086HbK9cIxWWGj2Tk-igIh5Scc2jA4U17rRicwL--6pRdfBxewyfcu1wvb5IISjpsKIoG0y0-er6Nyyayky",
-  colBlusas:
-    "https://lh3.googleusercontent.com/aida-public/AB6AXuA2hgNW4_ZukuFP4EohbKSMKS9IiX6tQCBqu2TKrDTB7hlWQFsUpkP5yAuOxseZ0p8zFgwPWw2eWhOO-pZ3RdlEDPSQx2Iq19ZvUOar0Bx3ULsQMtYAag_t9NrbNWXN4Fn-TreQp0KhEebqIjNMZkUR0zNT2aHGeym9QHp0SGgim8PXbIeQwKqjOXS4qifhBG7olCkTf6PtnlLOK7IjEiSJ-CR6GvX1288wnRijLIwR7XGxfG9nSF4W",
-  colLimitada:
-    "https://lh3.googleusercontent.com/aida-public/AB6AXuAP5qSYuxH_2SAp6pQeRMHpxQ7Ko--VqgvKfU13pi6ooDUoS4GEvFD7ULWPOeJwOznmDYqmjtr5RTPWc9mwy4kmlZNoKHBxu_6Y7hQ3paza8ebr3gml68zczh0DL5R0MZyEofTMYU6B6NQ5g-ETLIOaS2VX98pX1tz_yCay64R6aMlKytKbsbvDkVAS0RnVd4g4BMtIqxwelRfsKMvK2NhbnhVC1R4h1K5Vhf0aLyFSEAVMqSp0Tk4L",
-  santina:
-    "https://lh3.googleusercontent.com/aida-public/AB6AXuCQe1GR_D9RFBYpuKtC0QfQbBy4ZM5XQNGK7Ejz3DnMdHrRv_uYNNi3C2T2mkP5D9GpTMuVO_E5Nha4VitMzU045GuCWU24haZfkw9Jy7CgplNLQPozy6ykakzxxgFMWFQknRrAF3vQ89XoW6kIAGOVJKeJbd9E97_wTsQwPbroLAP4BViE_YxS-4MFc97ehQZG_RwEQU6DsuqOlKP7xE2BhXn-42Mpg9V3x1CN60--_MbTzNAp5FB0",
-  blusaCarmin:
-    "https://lh3.googleusercontent.com/aida-public/AB6AXuDxp9dgbK5hhl2peAsJ-r9n4AQWUW9mdPprYqQu3PPc4rrDD19xB9T-vOA-OfJcnU9kbkmlEouE-Zw5WscWpdOOoz2TdCGIww4vHcdKa-u3Cwr4ZGLNioRLTxvhEw5mmkcctMfssTYIubrRyiVBWu8BTEwC20Lw_zkSTBB8lxjtcaEejirwPyHorrYaOXy-74os1iJQAOLDyO2X_KAwo7ilFptoeg3HlSfpSLd33vTGyDBXOM_EHPs4",
-  olimpia:
-    "https://lh3.googleusercontent.com/aida-public/AB6AXuDR6_QHZuPO2L_SsmaIB2Ys4SWUHj5_uud5HiJ45wYdzCwg7kayPybUyV5BENvdpxfcRwC0oS_B8B-1Uns32cM9Q6ZaUbsreC2KfZXZ7Vw_0bybyuNjN8L837PUyp3npbzJfKtWfzOnEgP6VBpxVQLPVQnWT0PxBHfAU9Jrhvf8bX1Tq6xoNQLLD5vRHAlR0nkocNj6fB1QFnc8iY9luNgEgwUrz62JXkLHkg5sw1LUX9nddtIMClEp",
-  blazerMarfil:
-    "https://lh3.googleusercontent.com/aida-public/AB6AXuBG2uoiUnDb1tb7rjNX5U_SWkuULXc4a5xv1V0gxf1vNdtGdmej6HS-rt8qilx5i24V2EeYphHT4XyN2Jh-O5RZfexZnw_ev5ENpZT-dDkbFiknKR9rxKhjo0B-lZfCvIENuM1BObiXVLZjjsK98Ei8OMtL6hfokt2zei5yU97wXmo4OgCpSYWyKQ2odv7lmG0N2Bgatrw-cJpGGE5KM4qyAoU_F6tJKFlr6WdaZ3Qe4gNjTQMNAmVo",
-  ig1: "https://lh3.googleusercontent.com/aida-public/AB6AXuD6f5TAXsVQ75Y8k9Urq36fOyuCk0Z_3gUHOAM0XyEVq5B7IX8Y5oaYti39SOpWJoD5SXvjQfcHCav1qaJUJxOdkVFDKVExSaIu6JUQ6VRQXOCmj3f_ZSvDlcbK3SqvWAe9GX7dciRHrF81311P-1aZVG0Wm4OVE_MprW93hzht7TirjYG2xZgR09jcNKGLh-4p6eSBCj8qfROiIUJrJoZEiKYjzbcierS6-w4ZvqR3DK4yl3tEmL3Q",
-  ig2: "https://lh3.googleusercontent.com/aida-public/AB6AXuCL6oQWnOgpA6EiUAkQQR0AQFiajOtOxRFqrVqZF3i3NLwsKZrZtG93udgfWZq_hwhND5qCGHnpUKSuL-fXefpg1tp8NfVGl8m1WFfNA68aViiVjXyZWBr_7mNL_mvNKvhSxcO4gJ0eJ0QQubDjaioGpccleDLBUek6uaUzL_Mp8zJeKAF1I0lirlSsR_LnPpd4Uo64lvtdDbfDuIA-qzB_WW4ihTL_sKgLt0aXUhyEffCCeFkjDEL8",
-  ig3: "https://lh3.googleusercontent.com/aida-public/AB6AXuAM_hSAF02mTAeU5ZY_qxEsBvC7AV5Ix3Pe7ah2zbt7IjJ_0sgICvYQp9UNTQN9uasbwNC_TLPg14kmOHARNUb8JtGIX_6QLjArCcOCmlK1nP_VFRibU5bYGq23rnZ2kzprs3qTn5oURagq8FnWMP-b0VrIdlCwmaG8a4Ds3hUgBIgbZqn7L17VM6Ek6eFvM18vc8WcN9IiZndnuhFqyv7Tqj038Izl8lifJ07TL5ODCQaIjSn4fzkG",
-  ig4: "https://lh3.googleusercontent.com/aida-public/AB6AXuDOEz4LjPpk74t5uXRwfsqHxJSz1xrLERYYSSb-lp5rmDvN5vOULJ2MV42vP3fJitSTPkhMrfG-tFz2Yuy4i_RyEg8iXbTRH0Wd6QYbjriHqZdn9YgpvbL47jToVTPI6NX0AUf47dyN5v4nZDSh1zL4w-0NQ7OZWgy8OO5ODokcaxw9n7YSwYWCCtIHlKLexFUPeWqfv4ZouXtMyTQ2_iTMvmVtHvopTe6IbxFUV2TBxbqDArcSP-ul",
-  ig5: "https://lh3.googleusercontent.com/aida-public/AB6AXuBF5PzFl_mbsQg4O2mW91YyzR68MZvuwUrQX8NgZzD2GNv_0U9jOF71fqHX97WyVxQNCabJ2p4JM7Dl7PiuiCRQ_4kW-QPCJVZ1Ueln692zdz46ionHWw2VwfhuQIMejBD8sx5YXCFhT4kXRdwFjXX_ip8vHxsFOZICjPvFehaRiJKiL-1ArW2TV1ELlVgo98V7G7CBOyADL0Y3I6Fbh4W4Bw8WogadeZb0bEWmT8Jye4tIGyHTjFrF",
-  ig6: "https://lh3.googleusercontent.com/aida-public/AB6AXuDLLzfPMMtGHpGTvWkw_TLpXIxNpCFtzN019zt7cy6LuTCV55E2GwKyBpFIBzoP-5jkn7yB_2fl6p7Zwm7fFFrcolp8sEG3i42YPtg6puL-BJq3yMRHsVg7FEn8CESzOZcfpsmZV2daZ7-L2RlpOlp0uov4_Tt0qYJrAH4AxHn3DKP-SOzJvj_qAC-9xK0TjYW4zS7qDvnLtPYxV8TiMhrc-AhnBp8x2znbrD4DFFdubSpr2fip0oNQ",
-  santorini:
-    "https://lh3.googleusercontent.com/aida-public/AB6AXuDYzzei9gRLoGY4aKIubFcLohrDk8m7mciiNirLfSFYRE-wKv61OoDinQTO8RFl9X-QJMYM7mgEn_uItFSUNF63bpxsIWvfzA_RjnmkCCbnPgoRwdkCrVJSKhDdbkYkPLLe2AmSCGE29aAfjUJlw_OdQu0FxtixR_lt8lhhraVO8xg-HiBr-weIUQFjHiC0mTU2aRSkt7PAGvoLeCc3IajEjmg93T8eugLT1w3BSPRb5e35SiKZbp8o",
-  camisaLino:
-    "https://lh3.googleusercontent.com/aida-public/AB6AXuCVwGSPO5b2J9fQM740duCOhabFombgcjrOqaFAs_s2W60HhkXxBZgyZEZA1H0KsK7SvE5j7lyiW2i63sbC7Dvc-N4xM03a-TDhJYvHgwMkslFyeF602Jz4HfOZrOMxvXxmA_lUBEAWU28NoQ-l8SPtxGhb5LJrrh0LO74Wrziyzwjea4-arWbvcwBDPNBYijohaGEgVFW4ScE0UozjKb6DM968QXSTkoKbK4YnmOUPM8fHCcldThMv",
-  palazzo:
-    "https://lh3.googleusercontent.com/aida-public/AB6AXuCwX9YQ9u70w-3xp7Xa9hBnH6iPFYF12PkMX0_rJ1O0tYtoQiwE-Dxei8ZVEflAbI_oSi208ydeZm5XA1rVj-4ItGoZtTHQV9ZGRvQPfGL74x6CryJ-MP8bFFCNtqrAJ382i5xrVuMx-D3sTXQzKp1c2FFK4DCYW6E2egWjmerYtBZi1ELDUTZ5fVc2xkvT5lLDWc8WDiyEIrvlrCH7BlHoY6PHH15aS1ccmfMuG801fi1XYXKm97FD",
-  verona:
-    "https://lh3.googleusercontent.com/aida-public/AB6AXuCGQ08iP2GVtrKugxiTXew_sKSXzddFy32zpo_FQDkS6FLzh1AIExa8oEQBI7OF0CJmlEFKzVM_XXjjCZiV0W5CN50nXgYTbHtlQdDraWsJ__7yk5vZ9XUc_FZ7MxDQ5gleucCdZVRaYXdsDYTxLY_n2P_uypC2ulVlxU3yoU7tryxTmDFcEPifZKNJJlSMCD8ltY73_Es96Pcmr5YHZ6-8Gg875Z7N1fu8v1--L3Vz8gIDxyO-dKC2",
-  halterNatural:
-    "https://lh3.googleusercontent.com/aida-public/AB6AXuDGVPRAkKJdE9pYG5015F5TvE5F98bEL8RDIBOErqwhRgujWt3WzCWr2RrXkNUOR8ZIOlTN2C2NObTvK276cxwB3vnR_jakNLRRhzQvpYYX0YNkHfBc98F39kxXcGIGq3Hy_z4bdZOxjKtLw0txhCjVraB3r-TUh4W_gQe4N4bt9N5jRFowrXT9Ds5ZbT-LFGFL9bEFiQ4-6a7IYJu8LTSBadVSd1lSXkdtHLCbRcb8sG5o5OghaPz5",
-  siena:
-    "https://lh3.googleusercontent.com/aida-public/AB6AXuDu0cV30ClI3dsOl5FPzthmFAoAoId9Cf0vdP9JdSKRBW2t9-z7V9k6_9d4WluRYmsHdZxuO-kJPcb9GxpMDRMg208V8bdKK4s_K5YHy1jBQZBAhyTFY0IjY4RU06UDRYbdehA4JU7nlwnQPRe_MQKtaSX7GX1bCoQ9TvOmEWKExrsgxbBAgB7QYdiSvmgsbT97x-iXcn0qXigAPxlLBnNdzcrDt2i47jnLXFaDls4L-2w29Gux0HLn",
-  florencia1:
-    "https://lh3.googleusercontent.com/aida-public/AB6AXuCnuqdM7vweqf4Q9eznkFkSFpjFSBeEeZEBj0utWs9x2oURafx4aUyDZvtfMGocMzEwSlMlFbXTGp77pWNU6EIQvGaN1AAR4s5rEr4qn9M4ZSGy4eilOqzk9o1ypBTbCjiPpg3UH7-Ma-l-UH44gbGr0wKZNiCWtijgmALYN8UthdRJo4Dnc3aFIeIhbgmKwqmm-rzgpYE86J8v65sAtzDdGjvtEILcTop-4E86HHDYREWD7femRKPd",
-  florencia2:
-    "https://lh3.googleusercontent.com/aida-public/AB6AXuBsQOgKCcZdV63rSc0o9kX1xEm6vKO4LiPUlrClp9eG3tQfq_SR7qYbOixpIdT8lRgJGC3rAGc9dqcgLhKvY18N5bC_4UNGo3eQJfPOP3FO0Aea_HM9WxyYWp9uKhB-8iyExib4sEf_d9oZZA50xoF6kIecDJ7p3jG3XNfW4Bqd3cjwL4BrGu4MTLalMiXFRqnh-dJkchCE5ujB89ivPzNTPK9bWTCEK2zARuYQr1YZsYCDrKyHVQ3C",
-  florencia3:
-    "https://lh3.googleusercontent.com/aida-public/AB6AXuDCWpd1HuWxyhkJECgd9iqrFjQVgnBy3RAysTCPDpH7-27eNuC0_IpqPY6kQ_6zoeXLmJIOTMPi4u8Mi5SIwRlxVEWYQizgUoRN3TAJX2xIewpkE5Ma50mTv7u0ugX1NHX12693UCEKy6N_yrM-6hFVxeOoI6v0yAwE4JEbfiOKhHThGUn5ydS32ZdTeIDhpFEgAM8wBdv5vFHijREFjrrSTIiBReht1e2YN_5TfE6jxSSLCazhJvIZ",
-  florenciaAlt:
-    "https://lh3.googleusercontent.com/aida-public/AB6AXuCjz8ITQmxgc4vrlYmQ1882sqMshSyovW-f5_xkeE8imwNPMBiZhb3iTzEr_S7nkv81_uJGwAQgOyFZtql40hJcqf80Df4Ffdf_C6NQ6XkljDbKj_xmUw7_BmFLLNbc2JmURwXDyR62J0_ZvjwUCIEWQfR7VJh5-EPBQ22vhXUYI7DxDvgtuxhYZfkBCwZTxlEGAbQKK7sTl2EV-_I-OinbfhQ4oQBXbm-y871nC80uoCM4F774IZZC",
-  tote: "https://lh3.googleusercontent.com/aida-public/AB6AXuAGAKx5MKlAavSlEUWd06G-iybFZF_MUE0qRzA9B8faS8OdA63Or6hy6y-SmG6efAEYUs-SelqUNUQcLrBeq3f8-3wsTlUlq6hZitpWJtmUIfu4amX_henuYKsjDDFZZhA73-yKpp_SgZcJDGx-3Ssuohwu_uAnDgrcudSOyM7S01x1zKE5Lt5cveOTAX-Ysf8PNF6xZOE3AbN9ja8QH2NKqYGFFLcXCS3nBDaUTgwZWhU6onl0o7al",
-  sandalias:
-    "https://lh3.googleusercontent.com/aida-public/AB6AXuCK-y_v-5FHFn3Ib-jW51dnlfdAUf-T7zFmfU8JDnmgwvC14w7VJtGyVLDypp9za8ri61M7ntgzPv96Gr5OWegz5l2qUNzGG_Ugy6A9bIJiqJUSYyvl5D4vcJvi8xDNEBOXVu_YW-iAhnsPE_64ip3qyxcFm1YiqKk4vSpOxExEMU2_awTCqL83iPE1EFnof25SJCBN3XJXHYR3lyV3ecSjHomp5XOwB587khsmUH9y-dhQ4X59Zkk_",
-  florenciaBolsa:
-    "https://lh3.googleusercontent.com/aida-public/AB6AXuD3DR2L3oUTAZ4Fznzaufv1AWDGa9IR-R7bxZSb18-fxbJ7rXVBi7ZVCUq_T2L48_CffQefskGy1G5Q_52gvEVD9Sg1JYIJE8U0c8_6NJbwa6dxEwzrBpDXvjyIINBxFBebQRwfl9pQ8Q1CQYxM253cVqoenrYcuu4bpo78BcFcTgm-nkT_lSM_hXtTS59ne1m1jhzRAo4cZRFvoKJDNWBbGfQRL9sOPWGxy881Q2PrDi8v_lvAabdo",
-  halterNegro:
-    "https://lh3.googleusercontent.com/aida-public/AB6AXuAICJH1pMCPwNRQRhPA3xm8gVfLmUudHy_NiMm6oiR6c38q5R4XBgOakRjFeimVZR6MIo_kFJNP-y4XCbSYDoks3iO4329KAFQivatPsDVbN7VJV0Pmt00UlgOn0H5sWrx8B3zkn2wI740GxxeyiIiA3vXu21OpcCPzMzGw5VaWQd4CvnrVGek-qZs5w09aJROokCC8d8WU-BB7eVJ624YLS6Efh4OMRdX5JLhXgBB-v3jSzjm4b-DI",
+const unsplash = (id: string) => `https://images.unsplash.com/photo-${id}?auto=format&fit=crop&w=1600&q=80`;
+
+export const photo = {
+  // Ambiente / editorial
+  hero: unsplash("1496747611176-843222e1e57c"),
+  boutiqueInterior: unsplash("1441984904996-e0b6ba687e04"),
+  rack: unsplash("1612423284934-2850a4ea6b0f"),
+  floralField: unsplash("1517970640957-23d07d5ed08c"),
+  whiteDressStreet: unsplash("1574655563118-3e3eab32015d"),
+  whiteBlouseBasket: unsplash("1772855436877-3fe7489f4199"),
+  beachDress: unsplash("1789145508216-ade0a26d518a"),
+  greenSlipPalms: unsplash("1612454156787-6b5ad8f31304"),
+
+  // Vestidos
+  linenShiftDress: unsplash("1747396206869-75ea57b325ce"),
+  terracottaShirtDress: unsplash("1789110853872-f416085557fa"),
+  terracottaShirtDressBack: unsplash("1789110853833-bc1a883da2d6"),
+  blackSatinGown: unsplash("1623580674393-edf6eb7090f8"),
+  chocolateSatinDress: unsplash("1704775990154-b87562565d4c"),
+  floralMidiDress: unsplash("1762154057377-cc9d3dd6900c"),
+  sageMidiDress: unsplash("1789110519607-6176d668fb72"),
+  lavenderKnitDress: unsplash("1789110520279-49e8a3a6fb91"),
+  ivoryCrochetDress: unsplash("1789110520500-8fab603b19b8"),
+  whiteLinenBeltDress: unsplash("1789110520302-3df8ce0410f0"),
+  mustardButtonDress: unsplash("1789111161022-1970ba92f3b9"),
+
+  // Blusas y tops
+  whiteSatinShirt: unsplash("1704775991298-38b9139fdad9"),
+  whiteLinenShirt: unsplash("1614312185032-a96342b80e3d"),
+  crochetHalterTop: unsplash("1789111161049-d01ef1cb4974"),
+  smockedLavenderTop: unsplash("1789110520784-3845cb0d0694"),
+  blackOversizeTee: unsplash("1587070297440-7b8a62eb01c4"),
+  blackRibbedTank: unsplash("1762343041454-8f1fdd459811"),
+
+  // Pantalones y faldas
+  tropicalPalazzo: unsplash("1789110520665-f07353f0afbe"),
+  momJeans: unsplash("1789110854969-94d36ba7636e"),
+  printPalazzo: unsplash("1789110520319-9bbec0598773"),
+  blackFlaredSkirt: unsplash("1789110853398-539d78dd63bc"),
+  blackSatinSkirt: unsplash("1708363390932-15e8a29c0f56"),
+  camelSuedeSkirt: unsplash("1618244942912-7351be026e8b"),
+
+  // Conjuntos, monos y abrigos
+  sandSuit: unsplash("1779406166699-662a041a12a9"),
+  sandSuitAlt: unsplash("1779406165962-7df12de281b1"),
+  linenOversizeSet: unsplash("1690085028725-481caf2f27db"),
+  blackSuit: unsplash("1584273143981-41c073dfe8f8"),
+  paisleyJumpsuit: unsplash("1768803968246-5b8c7d04b722"),
+  paisleyJumpsuitAlt: unsplash("1768982596945-97c5aa2be5d0"),
+  whiteJumpsuit: unsplash("1725526750253-0abf4c3f4665"),
+  camelBlazer: unsplash("1590873802674-55bb8f947bc5"),
+  blackWrapCoat: unsplash("1760551937537-a29dbbfab30b"),
+  beigeTrench: unsplash("1692180142575-c31fcd106b5b"),
+  oatCardigan: unsplash("1782786980431-e0dcc25454c8"),
+  mintSweater: unsplash("1625520109015-2ee42baffda6"),
+
+  // Carteras
+  cognacWovenBag: unsplash("1598532163257-ae3c6b2524b6"),
+  chocolateClutch: unsplash("1749294435694-ce3c586591e6"),
+  juteCrossbody: unsplash("1641934777532-d277296b111c"),
+  beachBasket: unsplash("1763056531605-4e75d78e5016"),
+
+  // Bijouterie
+  goldHoops: unsplash("1671644730555-916aa8d8157f"),
+  twistedHoops: unsplash("1777999745587-31af0844db6c"),
+  ovalNecklace: unsplash("1783541507490-edb026e2a961"),
+  ringSet: unsplash("1631982690223-8aa4be0a2497"),
+
+  // Calzado y accesorios
+  twoToneSandals: unsplash("1585120824848-8a5cd41493d2"),
+  camelMules: unsplash("1718365837137-13cbd931068a"),
+  pastelMules: unsplash("1585488434451-7ee645d0574b"),
+  strawHats: unsplash("1774647001381-6585f36449f9"),
+  braidedBelt: unsplash("1711443982852-b3df5c563448"),
+  catEyeSunglasses: unsplash("1611824204322-24963b44d68b"),
 } as const;
