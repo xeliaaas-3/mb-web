@@ -44,6 +44,9 @@ export function PaymentInstructions({ method, total, orderId }: { method: string
           </div>
         ))}
       </dl>
+      {site.demo && (
+        <p className="mt-3 text-body-sm text-stone-text">Datos de pago de ejemplo: esta tienda es una demo.</p>
+      )}
       <p className="mt-3 rounded-xl bg-sand px-4 py-3 text-body-sm">
         Cuando pagues, enviá el comprobante por WhatsApp al {site.whatsappDisplay} y te confirmamos el envío.
       </p>

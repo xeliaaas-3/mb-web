@@ -55,6 +55,19 @@ export function Footer() {
         <p>Medios de pago: {paymentMethods.map((m) => m.split(" (")[0]).join(" · ")}</p>
         <p>
           © {new Date().getFullYear()} {site.name} · Paraguay
+          {site.demo && (
+            <>
+              {" · "}
+              <a
+                className="link-editorial"
+                href={`https://www.instagram.com/${site.demo.instagram}/`}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                Demo desarrollada por {site.demo.by} (@{site.demo.instagram})
+              </a>
+            </>
+          )}
         </p>
       </div>
     </footer>

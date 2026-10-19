@@ -8,6 +8,7 @@ import { bagDrawer } from "@/lib/bagDrawer";
 import { useCart } from "@/lib/cart";
 import { useFavorites } from "@/lib/favorites";
 import { site, whatsappLink } from "@/lib/site";
+import { DemoBanner } from "./DemoBanner";
 import { Logo } from "./Logo";
 import { menuSections, navLinks } from "./nav";
 import { WhatsAppIcon } from "./WhatsAppIcon";
@@ -34,6 +35,7 @@ export function Header() {
 
   return (
     <>
+      <DemoBanner />
       <p className="overflow-hidden bg-ink py-2 text-center label-caps-sm whitespace-nowrap text-white">
         <span className="tracking-[0.1em] sm:tracking-[0.25em]">
           Envíos a todo el país<span className="hidden sm:inline"> · {site.installments} cuotas sin interés</span> ·

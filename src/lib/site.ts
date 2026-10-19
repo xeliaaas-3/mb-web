@@ -7,9 +7,11 @@ export const site = {
   description:
     "Moda femenina de autor en lino, seda y algodón. Comprá online y coordiná tu pedido por WhatsApp. Envíos a todo Paraguay.",
   /** Número de WhatsApp en formato internacional, solo dígitos. */
-  whatsapp: "595971444874",
-  whatsappDisplay: "+595 971 444 874",
+  whatsapp: "595981768247",
+  whatsappDisplay: "+595 981 768 247",
   instagram: "albaboutique.py",
+  /** Esta tienda es una demo de StudioX: aviso arriba de todo y crédito en el pie de página. */
+  demo: { by: "StudioX", instagram: "studiox.py" },
   address: {
     street: "Av. España 1234",
     detail: "Villa Morra",
@@ -86,9 +88,9 @@ export const paymentDetails = {
     { label: "Titular", value: "Alba Boutique S.A." },
     { label: "RUC", value: "80000000-0" },
     { label: "Cuenta corriente", value: "0000000000" },
-    { label: "Alias", value: "0971444874" },
+    { label: "Alias", value: "0981000000" },
   ],
-  wallet: { label: "Número de billetera", value: "0971 444 874" },
+  wallet: { label: "Número de billetera", value: "0981 000 000" },
 } as const;
 
 export type PaymentKind = "transfer" | "wallet" | "on-delivery";

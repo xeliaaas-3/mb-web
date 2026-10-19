@@ -52,6 +52,7 @@ export function buildOrderMessage(orderId: string, form: CheckoutForm, items: Re
   const rule = "──────────────";
 
   const lines = [
+    ...(site.demo ? [`(Pedido de prueba desde la demo de ${site.demo.by})`, ""] : []),
     `¡Hola! Quiero confirmar este pedido hecho desde la web de ${site.name}.`,
     "",
     `*Pedido ${orderId}*`,
