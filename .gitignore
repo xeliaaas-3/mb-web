@@ -45,3 +45,6 @@ next-env.d.ts
 # Salida del build para Cloudflare (@opennextjs/cloudflare).
 # Se regenera con: npx opennextjs-cloudflare build
 .open-next/
+
+# Estado local de wrangler (cache de miniflare, sesiones de dev).
+.wrangler/
