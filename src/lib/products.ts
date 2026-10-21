@@ -1,0 +1,937 @@
+import { photo } from "./images";
+
+export type CategoryId =
+  | "vestidos"
+  | "blusas"
+  | "pantalones"
+  | "faldas"
+  | "conjuntos"
+  | "monos"
+  | "abrigos"
+  | "carteras"
+  | "bijouterie"
+  | "calzado"
+  | "accesorios";
+export type GroupId = "ropa" | "accesorios";
+export type CollectionTag = "verano" | "fiesta" | "oficina" | "tejidos";
+
+export type Color = { name: string; hex: string };
+export type Size = { label: string; stock: number };
+export type Badge = "nuevo" | "mas-vendido" | "ultimas" | "edicion-especial" | "oferta";
+
+export type Product = {
+  slug: string;
+  name: string;
+  category: CategoryId;
+  collections: CollectionTag[];
+  price: number;
+  compareAt?: number;
+  badge?: Badge;
+  material: string;
+  colors: Color[];
+  sizes: Size[];
+  /** `color` opcional: la imagen que muestra ese tono (se usa en la bolsa). */
+  images: { src: string; alt: string; color?: string }[];
+  description: string[];
+  /** Orden de "novedades": mayor = más reciente. */
+  addedAt: number;
+  /** Unidades vendidas (orden "más vendidos"). */
+  sold: number;
+};
+
+export const categories: { id: CategoryId; label: string; group: GroupId }[] = [
+  { id: "vestidos", label: "Vestidos", group: "ropa" },
+  { id: "blusas", label: "Blusas & tops", group: "ropa" },
+  { id: "pantalones", label: "Pantalones", group: "ropa" },
+  { id: "faldas", label: "Faldas", group: "ropa" },
+  { id: "conjuntos", label: "Conjuntos", group: "ropa" },
+  { id: "monos", label: "Monos", group: "ropa" },
+  { id: "abrigos", label: "Blazers & abrigos", group: "ropa" },
+  { id: "carteras", label: "Carteras", group: "accesorios" },
+  { id: "bijouterie", label: "Bijouterie", group: "accesorios" },
+  { id: "calzado", label: "Calzado", group: "accesorios" },
+  { id: "accesorios", label: "Sombreros, cintos & lentes", group: "accesorios" },
+];
+
+export const groups: { id: GroupId; label: string }[] = [
+  { id: "ropa", label: "Ropa" },
+  { id: "accesorios", label: "Accesorios" },
+];
+
+export type CollectionId = CollectionTag | "nuevos" | "sale";
+
+export const collections: {
+  id: CollectionId;
+  label: string;
+  description: string;
+  image: string;
+  alt: string;
+  match: (p: Product) => boolean;
+}[] = [
+  {
+    id: "nuevos",
+    label: "Nuevos ingresos",
+    description: "Lo último que llegó al showroom.",
+    image: photo.whiteJumpsuit,
+    alt: "Mujer con mono blanco caminando por la calle",
+    match: (p) => p.badge === "nuevo",
+  },
+  {
+    id: "verano",
+    label: "Verano & lino",
+    description: "Telas frescas para los días de calor.",
+    image: photo.floralField,
+    alt: "Mujer con vestido floral en un campo",
+    match: (p) => p.collections.includes("verano"),
+  },
+  {
+    id: "fiesta",
+    label: "Fiesta & cóctel",
+    description: "Satén, brillo y siluetas para la noche.",
+    image: photo.blackSatinGown,
+    alt: "Vestido largo de satén negro",
+    match: (p) => p.collections.includes("fiesta"),
+  },
+  {
+    id: "oficina",
+    label: "Oficina chic",
+    description: "Sastrería cómoda para todo el día.",
+    image: photo.camelBlazer,
+    alt: "Mujer con blazer camel",
+    match: (p) => p.collections.includes("oficina"),
+  },
+  {
+    id: "tejidos",
+    label: "Tejidos & punto",
+    description: "Crochet, punto y abrigos suaves.",
+    image: photo.oatCardigan,
+    alt: "Mujer con cárdigan tejido",
+    match: (p) => p.collections.includes("tejidos"),
+  },
+  {
+    id: "sale",
+    label: "Sale",
+    description: "Prendas seleccionadas con descuento.",
+    image: photo.mustardButtonDress,
+    alt: "Vestido mostaza con botones",
+    match: (p) => p.compareAt !== undefined,
+  },
+];
+
+export const badgeLabel: Record<Badge, string> = {
+  nuevo: "Nuevo",
+  "mas-vendido": "Más vendido",
+  ultimas: "Últimas unidades",
+  "edicion-especial": "Edición especial",
+  oferta: "Oferta",
+};
+
+const C = {
+  natural: { name: "Natural", hex: "#e8dfd0" },
+  blanco: { name: "Blanco", hex: "#f7f5f0" },
+  marfil: { name: "Marfil", hex: "#efe8da" },
+  negro: { name: "Negro", hex: "#1c1917" },
+  terracota: { name: "Terracota", hex: "#c0583c" },
+  chocolate: { name: "Chocolate", hex: "#4a2c20" },
+  floral: { name: "Floral", hex: "#e9c8c0" },
+  salvia: { name: "Salvia", hex: "#b7c4b2" },
+  esmeralda: { name: "Esmeralda", hex: "#1f5c45" },
+  lavanda: { name: "Lavanda", hex: "#b8a9c9" },
+  mostaza: { name: "Mostaza", hex: "#d9a21b" },
+  celeste: { name: "Celeste", hex: "#9fb7cc" },
+  rojo: { name: "Rojo tropical", hex: "#b8423a" },
+  arena: { name: "Arena", hex: "#d6c3a5" },
+  beige: { name: "Beige", hex: "#cdb79a" },
+  camel: { name: "Camel", hex: "#b07d4f" },
+  cognac: { name: "Coñac", hex: "#9a4f24" },
+  paisley: { name: "Paisley", hex: "#6b4a3a" },
+  avena: { name: "Avena", hex: "#d9cfbf" },
+  verdeAgua: { name: "Verde agua", hex: "#a9c9c0" },
+  yute: { name: "Yute", hex: "#d2bb8f" },
+  dorado: { name: "Dorado", hex: "#c9a24a" },
+  pastel: { name: "Lila", hex: "#c8b9e0" },
+} satisfies Record<string, Color>;
+
+/** Colores conocidos por nombre (sin acentos, en minúscula), para la planilla. */
+export const namedColors: Record<string, Color> = Object.fromEntries(
+  Object.values(C).map((c) => [
+    c.name
+      .toLowerCase()
+      .normalize("NFD")
+      .replace(/[\u0300-\u036f]/g, ""),
+    c,
+  ]),
+);
+
+const ropa = (s: number, m: number, l: number, xl = 0): Size[] => [
+  { label: "S", stock: s },
+  { label: "M", stock: m },
+  { label: "L", stock: l },
+  { label: "XL", stock: xl },
+];
+const jean = (stock: [number, number, number, number]): Size[] =>
+  ["36", "38", "40", "42"].map((label, i) => ({ label, stock: stock[i] }));
+const calzado = (stock: [number, number, number, number, number, number]): Size[] =>
+  ["35", "36", "37", "38", "39", "40"].map((label, i) => ({ label, stock: stock[i] }));
+const unico = (stock: number): Size[] => [{ label: "Único", stock }];
+
+/** Catálogo de ejemplo: se usa cuando no hay planilla configurada o la planilla falla. */
+export const sampleProducts: Product[] = [
+  // ——— Vestidos ———
+  {
+    slug: "vestido-recto-lino-natural",
+    name: "vestido recto lino natural",
+    category: "vestidos",
+    collections: ["verano"],
+    price: 265000,
+    badge: "nuevo",
+    material: "Lino 100%",
+    colors: [C.natural],
+    sizes: ropa(1, 2, 2, 1),
+    images: [{ src: photo.linenShiftDress, alt: "Vestido recto de lino color natural" }],
+    description: [
+      "Silueta recta y sin mangas en lino prelavado: fresco, liviano y con caída suave.",
+      "Ideal para el día a día con sandalias o para elevar con accesorios dorados.",
+    ],
+    addedAt: 47,
+    sold: 18,
+  },
+  {
+    slug: "vestido-camisero-terracota",
+    name: "vestido camisero terracota",
+    category: "vestidos",
+    collections: ["verano", "oficina"],
+    price: 289000,
+    badge: "mas-vendido",
+    material: "Lino y viscosa",
+    colors: [C.terracota],
+    sizes: ropa(2, 3, 1, 1),
+    images: [
+      { src: photo.terracottaShirtDress, alt: "Vestido camisero terracota con cinto, vista frontal" },
+      { src: photo.terracottaShirtDressBack, alt: "Vestido camisero terracota, vista de espalda" },
+    ],
+    description: [
+      "Camisero de manga corta con botones, bolsillos y cinto para marcar la cintura.",
+      "Un clásico que va de la oficina a un almuerzo sin cambiarse.",
+    ],
+    addedAt: 30,
+    sold: 64,
+  },
+  {
+    slug: "vestido-largo-saten-noir",
+    name: "vestido largo satén noir",
+    category: "vestidos",
+    collections: ["fiesta"],
+    price: 480000,
+    badge: "edicion-especial",
+    material: "Satén",
+    colors: [C.negro],
+    sizes: ropa(1, 1, 1),
+    images: [{ src: photo.blackSatinGown, alt: "Vestido largo de satén negro con tajo" }],
+    description: [
+      "Vestido largo de satén con breteles finos, drapeado en el busto y tajo lateral.",
+      "Para casamientos, graduaciones y noches especiales.",
+    ],
+    addedAt: 41,
+    sold: 22,
+  },
+  {
+    slug: "vestido-saten-chocolate",
+    name: "vestido satén chocolate",
+    category: "vestidos",
+    collections: ["fiesta"],
+    price: 395000,
+    material: "Satén",
+    colors: [C.chocolate],
+    sizes: ropa(1, 2, 1),
+    images: [{ src: photo.chocolateSatinDress, alt: "Vestido corto de satén color chocolate" }],
+    description: ["Corte cruzado con manga larga y brillo sutil. Perfecto para cócteles y cenas."],
+    addedAt: 28,
+    sold: 31,
+  },
+  {
+    slug: "vestido-midi-floral-provenza",
+    name: "vestido midi floral provenza",
+    category: "vestidos",
+    collections: ["verano"],
+    price: 310000,
+    badge: "nuevo",
+    material: "Viscosa estampada",
+    colors: [C.floral],
+    sizes: ropa(2, 2, 1),
+    images: [{ src: photo.floralMidiDress, alt: "Vestido midi con estampa floral y breteles" }],
+    description: ["Midi de breteles con falda amplia y estampa floral pintada. Romántico y liviano."],
+    addedAt: 46,
+    sold: 12,
+  },
+  {
+    slug: "vestido-midi-salvia",
+    name: "vestido midi salvia",
+    category: "vestidos",
+    collections: ["verano"],
+    price: 275000,
+    material: "Algodón",
+    colors: [C.salvia],
+    sizes: ropa(1, 2, 1),
+    images: [{ src: photo.sageMidiDress, alt: "Vestido midi verde salvia con escote fruncido" }],
+    description: ["Escote fruncido con elástico, breteles finos y largo midi. Fácil de llevar."],
+    addedAt: 35,
+    sold: 20,
+  },
+  {
+    slug: "vestido-slip-esmeralda",
+    name: "vestido slip esmeralda",
+    category: "vestidos",
+    collections: ["fiesta"],
+    price: 340000,
+    compareAt: 420000,
+    badge: "oferta",
+    material: "Satén",
+    colors: [C.esmeralda],
+    sizes: ropa(1, 1, 0),
+    images: [{ src: photo.greenSlipPalms, alt: "Vestido slip largo verde esmeralda con tajo" }],
+    description: ["Slip dress largo cortado al bies, con tajo y breteles regulables."],
+    addedAt: 12,
+    sold: 27,
+  },
+  {
+    slug: "vestido-punto-lavanda",
+    name: "vestido de punto lavanda",
+    category: "vestidos",
+    collections: ["tejidos"],
+    price: 298000,
+    badge: "nuevo",
+    material: "Punto calado",
+    colors: [C.lavanda],
+    sizes: ropa(1, 2, 1),
+    images: [{ src: photo.lavenderKnitDress, alt: "Vestido midi de punto calado color lavanda" }],
+    description: ["Tejido calado que se adapta al cuerpo, con breteles y largo midi."],
+    addedAt: 45,
+    sold: 9,
+  },
+  {
+    slug: "vestido-crochet-marfil",
+    name: "vestido crochet marfil",
+    category: "vestidos",
+    collections: ["tejidos", "verano"],
+    price: 360000,
+    badge: "ultimas",
+    material: "Algodón tejido a mano",
+    colors: [C.marfil],
+    sizes: ropa(0, 1, 1),
+    images: [{ src: photo.ivoryCrochetDress, alt: "Vestido de crochet color marfil sin mangas" }],
+    description: ["Crochet artesanal con forro interior. Una pieza única para el verano."],
+    addedAt: 33,
+    sold: 15,
+  },
+  {
+    slug: "vestido-lino-blanco-cinto",
+    name: "vestido lino blanco con cinto",
+    category: "vestidos",
+    collections: ["verano"],
+    price: 249000,
+    material: "Lino",
+    colors: [C.blanco],
+    sizes: ropa(2, 2, 2),
+    images: [{ src: photo.whiteLinenBeltDress, alt: "Vestido corto de lino blanco con cinto trenzado" }],
+    description: ["Corto, de manga murciélago y con cinto trenzado de algodón incluido."],
+    addedAt: 25,
+    sold: 33,
+  },
+  {
+    slug: "vestido-mostaza-botones",
+    name: "vestido mostaza con botones",
+    category: "vestidos",
+    collections: ["verano"],
+    price: 259000,
+    compareAt: 310000,
+    badge: "oferta",
+    material: "Viscosa",
+    colors: [C.mostaza],
+    sizes: ropa(1, 1, 1),
+    images: [{ src: photo.mustardButtonDress, alt: "Vestido midi mostaza abotonado con cinto" }],
+    description: ["Abotonado al frente, con cinto y falda con vuelo. Color que levanta cualquier día."],
+    addedAt: 10,
+    sold: 19,
+  },
+
+  // ——— Blusas & tops ———
+  {
+    slug: "camisa-saten-blanca",
+    name: "camisa satén blanca",
+    category: "blusas",
+    collections: ["oficina"],
+    price: 189000,
+    badge: "mas-vendido",
+    material: "Satén",
+    colors: [C.blanco],
+    sizes: ropa(3, 3, 2, 1),
+    images: [{ src: photo.whiteSatinShirt, alt: "Camisa de satén blanca con jean" }],
+    description: ["Camisa de satén con puños y caída fluida. Va con jean, sastrero o falda."],
+    addedAt: 29,
+    sold: 71,
+  },
+  {
+    slug: "camisa-lino-blanca",
+    name: "camisa de lino blanca",
+    category: "blusas",
+    collections: ["verano"],
+    price: 175000,
+    material: "Lino",
+    colors: [C.blanco],
+    sizes: ropa(2, 3, 2),
+    images: [{ src: photo.whiteLinenShirt, alt: "Camisa de lino blanca con bolsillo" }],
+    description: ["Básico de lino lavado con bolsillo al pecho. Fresca y para todo."],
+    addedAt: 21,
+    sold: 40,
+  },
+  {
+    slug: "top-halter-crochet",
+    name: "top halter crochet",
+    category: "blusas",
+    collections: ["tejidos", "verano"],
+    price: 129000,
+    badge: "nuevo",
+    material: "Algodón tejido",
+    colors: [C.lavanda],
+    sizes: ropa(2, 2, 1),
+    images: [{ src: photo.crochetHalterTop, alt: "Top halter de crochet lavanda, vista de espalda" }],
+    description: ["Top tejido a crochet con escote halter y espalda descubierta, atado en la nuca."],
+    addedAt: 44,
+    sold: 11,
+  },
+  {
+    slug: "top-fruncido-lavanda",
+    name: "top fruncido lavanda",
+    category: "blusas",
+    collections: ["verano"],
+    price: 119000,
+    material: "Algodón",
+    colors: [C.lavanda],
+    sizes: ropa(2, 2, 2),
+    images: [{ src: photo.smockedLavenderTop, alt: "Top fruncido color lavanda con mangas cortas" }],
+    description: ["Top con nido de abeja que se adapta al cuerpo y mangas con volado."],
+    addedAt: 24,
+    sold: 17,
+  },
+  {
+    slug: "remera-oversize-negra",
+    name: "remera oversize negra",
+    category: "blusas",
+    collections: [],
+    price: 99000,
+    material: "Algodón peinado",
+    colors: [C.negro],
+    sizes: ropa(3, 4, 3, 2),
+    images: [{ src: photo.blackOversizeTee, alt: "Remera oversize negra de hombro caído" }],
+    description: ["Remera amplia de hombro caído en algodón peinado. El básico que siempre se usa."],
+    addedAt: 15,
+    sold: 52,
+  },
+  {
+    slug: "musculosa-canale-negra",
+    name: "musculosa canalé negra",
+    category: "blusas",
+    collections: ["oficina"],
+    price: 89000,
+    material: "Algodón canalé",
+    colors: [C.negro],
+    sizes: ropa(3, 3, 2),
+    images: [{ src: photo.blackRibbedTank, alt: "Musculosa negra de canalé con falda blanca" }],
+    description: ["Musculosa de canalé ajustada para usar sola o debajo de un blazer."],
+    addedAt: 14,
+    sold: 38,
+  },
+
+  // ——— Pantalones ———
+  {
+    slug: "palazzo-tropical",
+    name: "pantalón palazzo tropical",
+    category: "pantalones",
+    collections: ["verano"],
+    price: 229000,
+    compareAt: 269000,
+    badge: "oferta",
+    material: "Viscosa",
+    colors: [C.rojo],
+    sizes: ropa(1, 2, 1),
+    images: [{ src: photo.tropicalPalazzo, alt: "Pantalón palazzo con estampa de hojas tropicales" }],
+    description: ["Palazzo de tiro alto con estampa tropical y cintura elástica posterior."],
+    addedAt: 9,
+    sold: 21,
+  },
+  {
+    slug: "jean-mom-celeste",
+    name: "jean mom celeste",
+    category: "pantalones",
+    collections: [],
+    price: 245000,
+    badge: "mas-vendido",
+    material: "Denim rígido",
+    colors: [C.celeste],
+    sizes: jean([2, 3, 3, 1]),
+    images: [{ src: photo.momJeans, alt: "Jean mom celeste con cinto de tela" }],
+    description: ["Tiro alto, pierna recta relajada y lavado celeste. Incluye cinto de tela."],
+    addedAt: 18,
+    sold: 66,
+  },
+  {
+    slug: "palazzo-print-terracota",
+    name: "pantalón palazzo print",
+    category: "pantalones",
+    collections: ["verano"],
+    price: 215000,
+    material: "Viscosa",
+    colors: [C.terracota],
+    sizes: ropa(1, 2, 2),
+    images: [{ src: photo.printPalazzo, alt: "Pantalón palazzo con estampa terracota" }],
+    description: ["Palazzo amplio con estampa en tonos tierra. Combina con tops lisos."],
+    addedAt: 20,
+    sold: 14,
+  },
+
+  // ——— Faldas ———
+  {
+    slug: "falda-evase-negra",
+    name: "falda evasé negra",
+    category: "faldas",
+    collections: ["oficina"],
+    price: 169000,
+    material: "Crepe",
+    colors: [C.negro],
+    sizes: ropa(2, 2, 1),
+    images: [{ src: photo.blackFlaredSkirt, alt: "Falda evasé negra a la rodilla" }],
+    description: ["Falda evasé a la rodilla con cierre invisible. Un básico de oficina."],
+    addedAt: 16,
+    sold: 25,
+  },
+  {
+    slug: "falda-midi-saten-negra",
+    name: "falda midi satén negra",
+    category: "faldas",
+    collections: ["fiesta", "oficina"],
+    price: 219000,
+    badge: "nuevo",
+    material: "Satén",
+    colors: [C.negro],
+    sizes: ropa(1, 2, 2),
+    images: [{ src: photo.blackSatinSkirt, alt: "Falda midi de satén negra con remera blanca" }],
+    description: ["Falda midi al bies con brillo suave. De día con remera, de noche con top."],
+    addedAt: 43,
+    sold: 10,
+  },
+  {
+    slug: "falda-gamuza-camel",
+    name: "falda midi gamuza camel",
+    category: "faldas",
+    collections: [],
+    price: 259000,
+    material: "Gamuza sintética",
+    colors: [C.camel],
+    sizes: ropa(1, 1, 1),
+    images: [{ src: photo.camelSuedeSkirt, alt: "Falda midi de gamuza camel con botones" }],
+    description: ["Midi de gamuza con botonadura al frente. Un toque setentoso."],
+    addedAt: 19,
+    sold: 13,
+  },
+
+  // ——— Conjuntos ———
+  {
+    slug: "traje-sastre-arena",
+    name: "traje sastre arena",
+    category: "conjuntos",
+    collections: ["oficina"],
+    price: 560000,
+    badge: "nuevo",
+    material: "Lino y viscosa",
+    colors: [C.arena],
+    sizes: ropa(1, 2, 1),
+    images: [
+      { src: photo.sandSuit, alt: "Traje sastre color arena, blazer y pantalón" },
+      { src: photo.sandSuitAlt, alt: "Traje sastre arena con blazer abierto" },
+    ],
+    description: [
+      "Blazer de solapa y pantalón recto de tiro alto en color arena.",
+      "Se vende como conjunto; se puede usar por separado.",
+    ],
+    addedAt: 42,
+    sold: 16,
+  },
+  {
+    slug: "conjunto-lino-oversize",
+    name: "conjunto lino oversize",
+    category: "conjuntos",
+    collections: ["verano"],
+    price: 420000,
+    material: "Lino",
+    colors: [C.beige],
+    sizes: ropa(1, 2, 1),
+    images: [{ src: photo.linenOversizeSet, alt: "Conjunto de camisa y pantalón de lino beige" }],
+    description: ["Camisa oversize y pantalón amplio de lino. Elegancia relajada."],
+    addedAt: 27,
+    sold: 23,
+  },
+  {
+    slug: "traje-sastre-negro",
+    name: "traje sastre negro",
+    category: "conjuntos",
+    collections: ["oficina", "fiesta"],
+    price: 590000,
+    material: "Gabardina",
+    colors: [C.negro],
+    sizes: ropa(1, 1, 1),
+    images: [{ src: photo.blackSuit, alt: "Traje sastre negro con blazer entallado" }],
+    description: ["Blazer entallado y pantalón recto. Impecable para eventos y reuniones."],
+    addedAt: 22,
+    sold: 19,
+  },
+
+  // ——— Monos ———
+  {
+    slug: "mono-paisley",
+    name: "mono estampado paisley",
+    category: "monos",
+    collections: ["verano"],
+    price: 330000,
+    material: "Viscosa",
+    colors: [C.paisley],
+    sizes: ropa(1, 2, 1),
+    images: [
+      { src: photo.paisleyJumpsuit, alt: "Mono de manga corta con estampa paisley" },
+      { src: photo.paisleyJumpsuitAlt, alt: "Mono paisley con cartera beige" },
+    ],
+    description: ["Mono de manga corta con cuello camisero y pierna amplia. Una sola prenda, look completo."],
+    addedAt: 26,
+    sold: 12,
+  },
+  {
+    slug: "mono-lino-blanco",
+    name: "mono lino blanco",
+    category: "monos",
+    collections: ["verano"],
+    price: 345000,
+    badge: "nuevo",
+    material: "Lino",
+    colors: [C.blanco],
+    sizes: ropa(1, 2, 1),
+    images: [{ src: photo.whiteJumpsuit, alt: "Mono de lino blanco con breteles" }],
+    description: ["Mono de breteles con pierna ancha en lino blanco. Fresco y sofisticado."],
+    addedAt: 40,
+    sold: 8,
+  },
+
+  // ——— Blazers & abrigos ———
+  {
+    slug: "blazer-camel",
+    name: "blazer camel",
+    category: "abrigos",
+    collections: ["oficina"],
+    price: 389000,
+    badge: "mas-vendido",
+    material: "Paño liviano",
+    colors: [C.camel],
+    sizes: ropa(2, 2, 2, 1),
+    images: [{ src: photo.camelBlazer, alt: "Blazer camel con musculosa negra" }],
+    description: ["Blazer recto de un botón, con hombreras suaves. Eleva cualquier look."],
+    addedAt: 23,
+    sold: 58,
+  },
+  {
+    slug: "tapado-cruzado-negro",
+    name: "tapado cruzado negro",
+    category: "abrigos",
+    collections: [],
+    price: 620000,
+    material: "Paño",
+    colors: [C.negro],
+    sizes: ropa(1, 1, 1),
+    images: [{ src: photo.blackWrapCoat, alt: "Tapado cruzado negro con cinto" }],
+    description: ["Tapado cruzado con cinto y solapa amplia. Para las noches frescas."],
+    addedAt: 11,
+    sold: 9,
+  },
+  {
+    slug: "trench-clasico-beige",
+    name: "trench clásico beige",
+    category: "abrigos",
+    collections: ["oficina"],
+    price: 650000,
+    badge: "edicion-especial",
+    material: "Gabardina de algodón",
+    colors: [C.beige],
+    sizes: ropa(1, 1, 1),
+    images: [{ src: photo.beigeTrench, alt: "Trench clásico beige" }],
+    description: ["El trench de siempre: cruzado, con cinto y gabardina de algodón."],
+    addedAt: 39,
+    sold: 7,
+  },
+  {
+    slug: "cardigan-tejido-avena",
+    name: "cárdigan tejido avena",
+    category: "abrigos",
+    collections: ["tejidos"],
+    price: 239000,
+    material: "Punto",
+    colors: [C.avena],
+    sizes: ropa(2, 2, 1),
+    images: [{ src: photo.oatCardigan, alt: "Cárdigan largo de punto color avena" }],
+    description: ["Cárdigan largo y abrigado en punto suave. Sobre vestidos o con jean."],
+    addedAt: 17,
+    sold: 29,
+  },
+  {
+    slug: "sweater-verde-agua",
+    name: "suéter verde agua",
+    category: "abrigos",
+    collections: ["tejidos"],
+    price: 219000,
+    compareAt: 259000,
+    badge: "oferta",
+    material: "Punto",
+    colors: [C.verdeAgua],
+    sizes: ropa(1, 2, 1),
+    images: [{ src: photo.mintSweater, alt: "Suéter de punto verde agua" }],
+    description: ["Suéter de cuello alto en punto grueso y tono verde agua."],
+    addedAt: 8,
+    sold: 18,
+  },
+
+  // ——— Carteras ———
+  {
+    slug: "cartera-trenzada-cognac",
+    name: "cartera trenzada coñac",
+    category: "carteras",
+    collections: [],
+    price: 420000,
+    badge: "mas-vendido",
+    material: "Cuero vacuno",
+    colors: [C.cognac],
+    sizes: unico(3),
+    images: [{ src: photo.cognacWovenBag, alt: "Cartera de cuero trenzado color coñac con cadena" }],
+    description: ["Cartera grande de cuero trenzado con asa de cadena. Entra todo."],
+    addedAt: 32,
+    sold: 44,
+  },
+  {
+    slug: "sobre-cuero-chocolate",
+    name: "sobre de cuero chocolate",
+    category: "carteras",
+    collections: ["fiesta"],
+    price: 245000,
+    material: "Cuero",
+    colors: [C.chocolate],
+    sizes: unico(4),
+    images: [{ src: photo.chocolateClutch, alt: "Cartera sobre de cuero color chocolate" }],
+    description: ["Sobre de cuero con cierre imantado. De mano o con correa desmontable."],
+    addedAt: 13,
+    sold: 20,
+  },
+  {
+    slug: "bolso-yute-bandolera",
+    name: "bolso de yute bandolera",
+    category: "carteras",
+    collections: ["verano"],
+    price: 189000,
+    material: "Yute y cuero",
+    colors: [C.yute],
+    sizes: unico(5),
+    images: [{ src: photo.juteCrossbody, alt: "Bolso tipo balde de yute con correa de cuero" }],
+    description: ["Bolso balde de yute con correa de cuero regulable."],
+    addedAt: 7,
+    sold: 26,
+  },
+  {
+    slug: "canasto-playero-tejido",
+    name: "canasto playero tejido",
+    category: "carteras",
+    collections: ["verano"],
+    price: 159000,
+    badge: "nuevo",
+    material: "Fibra natural",
+    colors: [C.natural],
+    sizes: unico(6),
+    images: [{ src: photo.beachBasket, alt: "Canasto tejido de playa con dijes" }],
+    description: ["Canasto tejido a mano con dijes de colores. Para la pileta o la playa."],
+    addedAt: 38,
+    sold: 10,
+  },
+
+  // ——— Bijouterie ———
+  {
+    slug: "argollas-doradas",
+    name: "argollas doradas",
+    category: "bijouterie",
+    collections: [],
+    price: 89000,
+    badge: "mas-vendido",
+    material: "Acero quirúrgico bañado en oro",
+    colors: [C.dorado],
+    sizes: unico(12),
+    images: [{ src: photo.goldHoops, alt: "Argollas doradas gruesas puestas" }],
+    description: ["Argollas gruesas medianas. Hipoalergénicas y no se oscurecen."],
+    addedAt: 6,
+    sold: 95,
+  },
+  {
+    slug: "aros-trenzados-dorados",
+    name: "aros trenzados dorados",
+    category: "bijouterie",
+    collections: ["fiesta"],
+    price: 79000,
+    material: "Acero quirúrgico bañado en oro",
+    colors: [C.dorado],
+    sizes: unico(10),
+    images: [{ src: photo.twistedHoops, alt: "Aros de argolla trenzados dorados sobre seda" }],
+    description: ["Argollas finas trenzadas. Delicadas para todos los días."],
+    addedAt: 5,
+    sold: 47,
+  },
+  {
+    slug: "collar-ovalo-dorado",
+    name: "collar óvalo dorado",
+    category: "bijouterie",
+    collections: [],
+    price: 129000,
+    badge: "nuevo",
+    material: "Acero quirúrgico bañado en oro",
+    colors: [C.dorado],
+    sizes: unico(8),
+    images: [{ src: photo.ovalNecklace, alt: "Collar de cadena con colgante oval dorado" }],
+    description: ["Cadena fina con dije oval. Largo 45 cm con extensor."],
+    addedAt: 37,
+    sold: 14,
+  },
+  {
+    slug: "set-anillos-delicados",
+    name: "set de anillos delicados",
+    category: "bijouterie",
+    collections: [],
+    price: 99000,
+    material: "Plata 925 bañada en oro",
+    colors: [C.dorado],
+    sizes: unico(9),
+    images: [{ src: photo.ringSet, alt: "Set de tres anillos finos dorados" }],
+    description: ["Set de tres anillos finos para combinar. Talle ajustable."],
+    addedAt: 4,
+    sold: 33,
+  },
+
+  // ——— Calzado ———
+  {
+    slug: "sandalias-cuero-dos-tonos",
+    name: "sandalias de cuero dos tonos",
+    category: "calzado",
+    collections: ["verano"],
+    price: 239000,
+    material: "Cuero",
+    colors: [C.negro],
+    sizes: calzado([1, 2, 2, 2, 1, 0]),
+    images: [{ src: photo.twoToneSandals, alt: "Sandalias de cuero negro y marrón" }],
+    description: ["Sandalias planas de cuero con plantilla acolchada. Cómodas todo el día."],
+    addedAt: 3,
+    sold: 37,
+  },
+  {
+    slug: "mules-taco-camel",
+    name: "mules de taco camel",
+    category: "calzado",
+    collections: ["oficina"],
+    price: 299000,
+    badge: "nuevo",
+    material: "Cuero",
+    colors: [C.camel],
+    sizes: calzado([0, 1, 2, 2, 1, 1]),
+    images: [{ src: photo.camelMules, alt: "Mules de cuero camel con taco medio" }],
+    description: ["Mules de punta cuadrada y taco medio de 6 cm. Elegancia cómoda."],
+    addedAt: 36,
+    sold: 12,
+  },
+  {
+    slug: "mules-pastel",
+    name: "mules pastel",
+    category: "calzado",
+    collections: ["verano"],
+    price: 259000,
+    compareAt: 299000,
+    badge: "oferta",
+    material: "Cuero",
+    colors: [C.pastel],
+    sizes: calzado([1, 1, 2, 1, 0, 0]),
+    images: [{ src: photo.pastelMules, alt: "Mules de taco en tonos lila y celeste" }],
+    description: ["Mules de taco bajo en tonos pastel. Alegres y combinables."],
+    addedAt: 2,
+    sold: 16,
+  },
+
+  // ——— Sombreros, cintos & lentes ———
+  {
+    slug: "sombrero-de-paja",
+    name: "sombrero de paja",
+    category: "accesorios",
+    collections: ["verano"],
+    price: 135000,
+    material: "Paja natural",
+    colors: [C.natural],
+    sizes: unico(7),
+    images: [{ src: photo.strawHats, alt: "Sombreros de paja con cinta" }],
+    description: ["Sombrero de ala media en paja natural con cinta negra."],
+    addedAt: 1,
+    sold: 22,
+  },
+  {
+    slug: "cinturon-trenzado",
+    name: "cinturón trenzado de cuero",
+    category: "accesorios",
+    collections: [],
+    price: 95000,
+    material: "Cuero",
+    colors: [C.cognac],
+    sizes: [
+      { label: "S/M", stock: 4 },
+      { label: "M/L", stock: 4 },
+    ],
+    images: [{ src: photo.braidedBelt, alt: "Cinturón de cuero trenzado marrón" }],
+    description: ["Cinturón de cuero trenzado con hebilla plateada. Se ajusta en cualquier agujero."],
+    addedAt: 0,
+    sold: 19,
+  },
+  {
+    slug: "lentes-cat-eye",
+    name: "lentes de sol cat eye",
+    category: "accesorios",
+    collections: ["verano"],
+    price: 149000,
+    material: "Acetato con protección UV400",
+    colors: [C.camel],
+    sizes: unico(6),
+    images: [{ src: photo.catEyeSunglasses, alt: "Lentes de sol cat eye" }],
+    description: ["Lentes cat eye con filtro UV400 y estuche incluido."],
+    addedAt: 34,
+    sold: 24,
+  },
+];
+
+export function findProduct(products: Product[], slug: string) {
+  return products.find((p) => p.slug === slug);
+}
+
+export function categoryOf(p: Product) {
+  return categories.find((c) => c.id === p.category)!;
+}
+
+export function inStock(p: Product) {
+  return p.sizes.some((s) => s.stock > 0);
+}
+
+export function totalStock(p: Product) {
+  return p.sizes.reduce((n, s) => n + s.stock, 0);
+}
+
+export function imageFor(p: Product, color: string) {
+  return p.images.find((i) => i.color === color) ?? p.images[0];
+}
+
+export const newest = (products: Product[], n: number) =>
+  [...products].sort((a, b) => b.addedAt - a.addedAt).slice(0, n);
+export const bestSellers = (products: Product[], n: number) =>
+  [...products].sort((a, b) => b.sold - a.sold).slice(0, n);

@@ -39,3 +39,12 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+.vercel
+
+# Salida del build para Cloudflare (@opennextjs/cloudflare).
+# Se regenera con: npx opennextjs-cloudflare build
+.open-next/
+
+# Estado local de wrangler (cache de miniflare, sesiones de dev).
+.wrangler/
