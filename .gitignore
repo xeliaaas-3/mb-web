@@ -41,3 +41,7 @@ yarn-error.log*
 next-env.d.ts
 
 .vercel
+
+# Salida del build para Cloudflare (@opennextjs/cloudflare).
+# Se regenera con: npx opennextjs-cloudflare build
+.open-next/

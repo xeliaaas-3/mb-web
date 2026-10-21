@@ -20,6 +20,10 @@ const geist = Geist({ subsets: ["latin"], variable: "--font-geist" });
 
 export const metadata: Metadata = {
   metadataBase: new URL(site.url),
+  // Ver la nota en src/app/robots.ts: es una demo colgando del dominio de la
+  // agencia. robots.txt frena el rastreo; esto frena la indexación, que no es
+  // lo mismo.
+  robots: { index: false, follow: false, nocache: true },
   title: { default: `${site.name} | Moda femenina de autor en Paraguay`, template: `%s | ${site.name}` },
   description: site.description,
   openGraph: { siteName: site.name, locale: "es_PY", type: "website" },

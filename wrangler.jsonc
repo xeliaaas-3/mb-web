@@ -1,0 +1,47 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "alba-boutique",
+
+  // Cuenta fijada a proposito. Sin esto, wrangler despliega en la cuenta de
+  // la sesion activa, sea cual sea: ya paso una vez que la sesion habia
+  // cambiado a otra persona y este worker termino subido a su cuenta. Con el
+  // id escrito, una sesion equivocada falla en vez de desplegar en el lugar
+  // incorrecto.
+  "account_id": "bf609878ecf7d1cc4fb6b435964cc747",
+  "main": ".open-next/worker.js",
+  "compatibility_date": "2026-10-01",
+
+  // nodejs_compat lo exige @opennextjs/cloudflare: Next usa APIs de Node
+  // (streams, buffer, crypto) que el runtime de Workers solo expone con esta
+  // bandera.
+  "compatibility_flags": ["nodejs_compat"],
+
+  "assets": {
+    // Lo estatico que genera OpenNext: el build de Next mas /public.
+    "directory": ".open-next/assets",
+    "binding": "ASSETS"
+  },
+
+  // Worker APARTE del de StudioX, a proposito. Son dos proyectos con ciclos
+  // de vida distintos: desplegar la tienda no puede poder romper el sitio de
+  // la agencia, ni al reves.
+  "routes": [{ "pattern": "tienda.studioxcreative.digital", "custom_domain": true }],
+
+  // Sin workers_dev no habria URL de respaldo mientras el subdominio se
+  // resuelve. Ya paso una vez con el sitio de StudioX: agregar "routes" la
+  // apaga por defecto y, si el dominio falla, no queda nada sirviendo.
+  "workers_dev": true,
+
+  // Cache de revalidacion. El catalogo se lee de una planilla de Google con
+  // revalidate de 5 minutos; sin un KV donde guardar el resultado, cada
+  // visita volveria a pedir el CSV.
+  "kv_namespaces": [{ "binding": "NEXT_INC_CACHE_KV", "id": "89a72d11bf1b471f98efcc60856e3607" }],
+
+  // NEXT_PUBLIC_SITE_URL NO va acá: es de tiempo de compilacion y vive en
+  // .env.production. Puesta como var del Worker no tiene efecto, porque Next
+  // ya la incrusto en el bundle durante el build.
+
+  "observability": {
+    "enabled": true
+  }
+}

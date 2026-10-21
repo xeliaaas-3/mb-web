@@ -1,6 +1,15 @@
 export const site = {
-  /** URL pública (sin barra final). Cambiar al dominio propio con NEXT_PUBLIC_SITE_URL. */
-  url: (process.env.NEXT_PUBLIC_SITE_URL ?? "https://mb-web-drab.vercel.app").replace(/\/$/, ""),
+  /**
+   * URL pública, sin barra final. Se puede pisar con NEXT_PUBLIC_SITE_URL.
+   *
+   * ⚠ EL VALOR DE RESERVA ES EL DOMINIO REAL, no una URL de preview. Las
+   * variables NEXT_PUBLIC_* las incrusta Next AL COMPILAR: definirla en
+   * tiempo de ejecución —por ejemplo como "var" del Worker— llega tarde y el
+   * build ya usó la reserva. Pasó: el robots.txt y el sitemap se publicaron
+   * apuntando a mb-web-drab.vercel.app. Con el dominio real acá, el peor caso
+   * es el correcto aunque nadie defina la variable.
+   */
+  url: (process.env.NEXT_PUBLIC_SITE_URL ?? "https://tienda.studioxcreative.digital").replace(/\/$/, ""),
   name: "Alba Boutique",
   shortName: "Alba",
   tagline: "Boutique | PY",
